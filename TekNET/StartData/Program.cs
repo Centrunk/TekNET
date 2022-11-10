@@ -70,8 +70,31 @@ namespace StartData
 					try
 					{
 						string CMD;
+						string? message = "";
+						int pri;
+						string? priPAR = "";
+						Console.WriteLine("");
+						Console.WriteLine("Message: ");
+						message = Console.ReadLine();
+					RTS:
+						Console.WriteLine("Pri (0-7): ");
+						priPAR = Console.ReadLine();
+						if (priPAR != null)
+						{
+							pri = int.Parse(priPAR);
+						}
+						else
+						{
+							Console.WriteLine("Invalid Priority");
+							goto RTS;
+						}
+						if (pri < 0 || pri > 7)
+						{
+							Console.WriteLine("Invalid Priority");
+							goto RTS;
+						}
 
-					VC:
+						RTC = 5;
 						MyCOMPort.WriteLine("VCALL737");
 						Console.WriteLine("VCALL737");
 						CMD = MyCOMPort.ReadLine();
@@ -80,6 +103,7 @@ namespace StartData
 #endif
 						if (CMD == "RCALL858")
 						{
+							RTC = 5;
 						NT:
 							MyCOMPort.WriteLine("NT03");
 							Console.WriteLine("NT03");
@@ -90,6 +114,7 @@ namespace StartData
 
 							if (CMD == "NTACK")
 							{
+								RTC = 5;
 							TK:
 								MyCOMPort.WriteLine("TKTech1,Tech2,Admin");
 								Console.WriteLine("TKTech1,Tech2,Admin");
@@ -100,9 +125,10 @@ namespace StartData
 
 								if (CMD == "TKAK")
 								{
+									RTC = 5;
 								Cap:
-									MyCOMPort.WriteLine("CAP01");
-									Console.WriteLine("CAP01");
+									MyCOMPort.WriteLine("CAP0" + pri);
+									Console.WriteLine("CAP0" + pri);
 									CMD = MyCOMPort.ReadLine();
 #if DEBUG
 									Console.WriteLine(CMD);
@@ -110,6 +136,7 @@ namespace StartData
 									int CHKSUMRTC = 0;
 									if (CMD == "CAPACK")
 									{
+										RTC = 5;
 									tomR:
 										MyCOMPort.WriteLine("TOMR");
 										Console.WriteLine("TOMR");
@@ -119,17 +146,18 @@ namespace StartData
 #endif
 										if (CMD == "RFT")
 										{
+											RTC = 5;
 										Msg:
-											string msg = "TOMThis is a test of the tone out system";
-											string msgtbh = "This is a test of the tone out system";
-											MyCOMPort.WriteLine(msg);
-											Console.WriteLine(msg);
+											string msgt = "TOM" + message;
+											MyCOMPort.WriteLine(msgt);
+											Console.WriteLine(msgt);
 											CMD = MyCOMPort.ReadLine();
 #if DEBUG
 											Console.WriteLine(CMD);
 #endif
 											if (CMD == "TOMACK")
 											{
+												RTC = 5;
 											CHKSUM:
 												if (CHKSUMRTC == 5)
 												{
@@ -142,7 +170,7 @@ namespace StartData
 												}
 												using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
 												{
-													string hash = BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(msgtbh))).Replace("-", String.Empty);
+													string hash = BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(message))).Replace("-", String.Empty);
 													MyCOMPort.WriteLine("CHKSUM" + hash);
 													Console.WriteLine("CHKSUM" + hash);
 												}
@@ -153,7 +181,7 @@ namespace StartData
 #endif
 												if (CMD == "CHKSUMAK")
 												{
-												//MyCOMPort.WriteLine("TOMThis is a test of the tone out system");
+													RTC = 5;
 												RFNM:
 													CMD = MyCOMPort.ReadLine();
 #if DEBUG
@@ -165,7 +193,6 @@ namespace StartData
 													}
 													else
 													{
-														Thread.Sleep(50);
 														goto RFNM;
 													}
 												}
@@ -182,26 +209,71 @@ namespace StartData
 											}
 											else
 											{
+												RTC--;
+												if (RTC == 0)
+												{
+													Console.WriteLine("Retry Counter Timeout");
+													goto restart;
+												}
+												else
+												{
+												}
 												goto Msg;
 											}
 										}
 										else
 										{
+											RTC--;
+											if (RTC == 0)
+											{
+												Console.WriteLine("Retry Counter Timeout");
+												goto restart;
+											}
+											else
+											{
+											}
 											goto tomR;
 										}
 									}
 									else
 									{
+										RTC--;
+										if (RTC == 0)
+										{
+											Console.WriteLine("Retry Counter Timeout");
+											goto restart;
+										}
+										else
+										{
+										}
 										goto Cap;
 									}
 								}
 								else
 								{
+									RTC--;
+									if (RTC == 0)
+									{
+										Console.WriteLine("Retry Counter Timeout");
+										goto restart;
+									}
+									else
+									{
+									}
 									goto TK;
 								}
 							}
 							else
 							{
+								RTC--;
+								if (RTC == 0)
+								{
+									Console.WriteLine("Retry Counter Timeout");
+									goto restart;
+								}
+								else
+								{
+								}
 								goto NT;
 							}
 						}
@@ -211,7 +283,7 @@ namespace StartData
 							goto restart;
 						}
 					}
-					catch (Exception Ex) { }
+					catch (Exception Ex) { goto restart; }
 					MyCOMPort.Close();
 				}
 			}

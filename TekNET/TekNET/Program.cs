@@ -447,6 +447,7 @@ namespace TekNET
 #if DEBUG
 						Console.WriteLine(RxedData);
 #endif
+						Console.WriteLine("");
 						Console.BackgroundColor = ConsoleColor.Green;
 						Console.WriteLine("Comms OK");
 						Console.ResetColor();
@@ -622,7 +623,7 @@ namespace TekNET
 										//Start Page
 										//FYI IDIOT: You didnt add a place in the comms for it to tell TechNet what techs to page.... Just do an all call for now... idot
 										//TODO: THIS
-										TONEOUT(TXMSG, RXTECH, NT, CONFO.COMT);
+										TONEOUT(TXMSG, RXTECH, CAP, CONFO.COMT);
 										MyCOMPort.WriteLine("RFNM");
 										goto ST;
 									}
@@ -857,6 +858,7 @@ namespace TekNET
 			try
 			{
 				Logger log = LogManager.GetCurrentClassLogger();
+				Console.WriteLine("");
 				Console.BackgroundColor = ConsoleColor.White;
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Page Out");
@@ -899,6 +901,18 @@ namespace TekNET
 
 						case 4:
 							alert = "\\Alert5.wav";
+							break;
+
+						case 5:
+							alert = "\\Alert6.wav";
+							break;
+
+						case 6:
+							alert = "\\Alert7.wav";
+							break;
+
+						case 7:
+							alert = "\\Alert8.wav";
 							break;
 
 						case 0:
