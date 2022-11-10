@@ -1,4 +1,9 @@
-﻿using NAudio.Wave;
+﻿/*
+*   Copyright (C) 2022 by N5UWU
+*   This program is distributed WITHOUT WARRANTY.
+*/
+
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using NLog;
 using System;
@@ -6,20 +11,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
-using System.Security.Policy;
 using System.Speech.Synthesis;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
-using System.Windows.Forms.VisualStyles;
 
 /*
 * Tek entrys will only contain the name, All Tech Specific settings (Tone Pairs) will be in individual TXT files
 * COMP is the comport of the RS232 relay ('A' Open, 'a' close)
 * COMT is the comport of the Env Monitor PC, Toneout Voice Text will come via RS232 from the Env mon, along with what tek needs to be toned out.
 */
+
+//TOTO: Add this!!!! https://github.com/gui-cs/Terminal.Gui
 
 namespace TekNET
 {
@@ -402,10 +406,10 @@ namespace TekNET
 
 					//COM port settings to 8N1 mode
 					MyCOMPort.PortName = P.COMP;            // Name of the COM port
-					MyCOMPort.BaudRate = 9600;               // Baudrate = 9600bps
-					MyCOMPort.Parity = Parity.None;          // Parity bits = none
-					MyCOMPort.DataBits = 8;                  // No of Data bits = 8
-					MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
+					MyCOMPort.BaudRate = 115200;            // Baudrate = 115200bps
+					MyCOMPort.Parity = Parity.None;         // Parity bits = none
+					MyCOMPort.DataBits = 8;                 // No of Data bits = 8
+					MyCOMPort.StopBits = StopBits.One;      // No of Stop bits = 1
 
 					int NT = 0;
 					int CAP = 0;
@@ -488,6 +492,30 @@ namespace TekNET
 #endif
 							try { SHAR = RxedData.Substring(0, 2); }
 							catch (Exception e)
+							{
+								MyCOMPort.WriteLine("NAK");
+								goto TK;
+							}
+							if (SHAR == "TK")
+							{
+								string rxtechtemp;
+								try { rxtechtemp = RxedData.Substring(2, (RxedData.Length - 2)); }
+								catch (Exception e)
+								{
+									MyCOMPort.WriteLine("NAK");
+									goto TK;
+								}
+								RXTECH = rxtechtemp.Split(',');
+#if DEBUG
+								Console.WriteLine("DEBUG: TECHS:");
+								foreach (string s in RXTECH)
+								{
+									Console.WriteLine(s);
+								}
+#endif
+								MyCOMPort.WriteLine("TKAK");
+							}
+							else
 							{
 								MyCOMPort.WriteLine("NAK");
 								goto TK;
@@ -579,7 +607,7 @@ namespace TekNET
 								{
 									try
 									{
-										rxsum = RxedData.Substring(0, 5);
+										rxsum = RxedData.Substring(6, (RxedData.Length - 6));
 #if DEBUG
 										Console.WriteLine("RXSUM: " + rxsum);
 #endif
@@ -603,6 +631,8 @@ namespace TekNET
 										//FYI IDIOT: You didnt add a place in the comms for it to tell TechNet what techs to page.... Just do an all call for now... idot
 										//TODO: THIS
 										TONEOUT(TXMSG, RXTECH, NT, CONFO.COMT);
+										MyCOMPort.WriteLine("RFNM");
+										goto ST;
 									}
 									catch (Exception e)
 									{
@@ -633,8 +663,8 @@ namespace TekNET
 						 * Wait for NT## (must be sent as two digit)
 						 * Store NT (Number of Techs)
 						 * Send NTACK
-						 * TODO:Wait for TKtech1,tech2,tech3 (Tech list must be Comma seped)
-						 * TODO:Send TKACK
+						 * Wait for TKtech1,tech2,tech3 (Tech list must be Comma seped)
+						 * Send TKACK
 						 * TODO:Wait for CHKSUM
 						 * TODO:Store TCHKSUM
 						 * TODO:Compare TCHKSUM RX to Computed Checksum of TK
@@ -657,11 +687,13 @@ namespace TekNET
 						 * If bad, jump back to wait for TOMR
 						 * **Start Tone**
 						 * Once Tone out is complete send RFNM and wait for VCALL737
+						 *
+						 * TODO: Add Abort and Retry Code
 						 */
 					}
 					else
 					{
-						MyCOMPort.Write("NAK");
+						MyCOMPort.Write("SNAK");
 						goto ST;
 					}
 					Console.Beep();
@@ -768,7 +800,7 @@ namespace TekNET
 								RS232RELAYOPEN(P.COMT);
 								using (var synthesizer = new SpeechSynthesizer())
 								{
-									using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Alert4.wav"))
+									using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Alert1.wav"))
 									{
 										synthesizer.SetOutputToDefaultAudioDevice();
 										Sin(FT, 1);
