@@ -16,6 +16,7 @@ using System.Speech.Synthesis;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Windows.Forms;
 
 /*
 * Tek entrys will only contain the name, All Tech Specific settings (Tone Pairs) will be in individual TXT files
@@ -435,21 +436,9 @@ namespace TekNET
 						Console.Clear();
 						Console.WriteLine("Waiting for Data");
 					}
+
 				ST:
-					MyCOMPort.WriteLine("TNS");
-					try
-					{
-						RxedData = MyCOMPort.ReadLine(); // Wait for data reception
-#if DEBUG
-						Console.WriteLine(RxedData);
-#endif
-					}
-					catch (Exception Ex)//Catch Time out Exception
-					{
-#if DEBUG
-						Console.WriteLine(Ex.Message);
-#endif
-					}
+					RxedData = MyCOMPort.ReadLine();
 					if (RxedData == "VCALL737")
 					{
 						MyCOMPort.WriteLine("RCALL858");
@@ -458,6 +447,9 @@ namespace TekNET
 #if DEBUG
 						Console.WriteLine(RxedData);
 #endif
+						Console.BackgroundColor = ConsoleColor.Green;
+						Console.WriteLine("Comms OK");
+						Console.ResetColor();
 						string SHAR = null;
 						try { SHAR = RxedData.Substring(0, 2); }
 						catch (Exception e)
@@ -916,10 +908,41 @@ namespace TekNET
 					}
 					using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + alert))
 					{
-						synthesizer.SetOutputToDefaultAudioDevice();
-						Sin(1000, 8);
-						Thread.Sleep(1000);
-
+						if (techs[0] != "AllCal")
+						{
+							foreach (string T in techs)
+							{
+								string[] lines = null;
+								double FT;
+								double ST;
+								string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + T + ".txt";
+								try
+								{
+									lines = File.ReadAllLines(TPATH);
+								}
+								catch (Exception e)
+								{
+									Console.WriteLine("");
+									Console.WriteLine("Tech File Missing");
+									Console.Beep();
+									Console.Beep();
+									Console.Beep();
+									Console.ReadKey();
+								}
+								FT = double.Parse(lines[0]);
+								ST = double.Parse(lines[1]);
+								synthesizer.SetOutputToDefaultAudioDevice();
+								Sin(FT, 1);
+								Sin(ST, 3);
+								Thread.Sleep(1000);
+							}
+						}
+						else
+						{
+							synthesizer.SetOutputToDefaultAudioDevice();
+							Sin(1000, 8);
+							Thread.Sleep(1000);
+						}
 						player.PlaySync();
 						synthesizer.Speak(message);
 					}

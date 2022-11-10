@@ -7,6 +7,7 @@ using Microsoft.VisualBasic;
 using System.IO.Ports;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Text.RegularExpressions;
 
 namespace StartData
@@ -61,7 +62,6 @@ namespace StartData
 					MyCOMPort.Parity = Parity.None;        // Parity bits = none
 					MyCOMPort.DataBits = 8;                  // No of Data bits = 8
 					MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
-
 					try
 					{
 						MyCOMPort.Open();   // Open the port
@@ -70,6 +70,7 @@ namespace StartData
 					try
 					{
 						string CMD;
+
 					VC:
 						MyCOMPort.WriteLine("VCALL737");
 						Console.WriteLine("VCALL737");
@@ -90,8 +91,8 @@ namespace StartData
 							if (CMD == "NTACK")
 							{
 							TK:
-								MyCOMPort.WriteLine("TKtech1,tech2,Admin");
-								Console.WriteLine("TKtech1,tech2,Admin");
+								MyCOMPort.WriteLine("TKTech1,Tech2,Admin");
+								Console.WriteLine("TKTech1,Tech2,Admin");
 								CMD = MyCOMPort.ReadLine();
 #if DEBUG
 								Console.WriteLine(CMD);
