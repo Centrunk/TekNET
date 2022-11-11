@@ -8,6 +8,8 @@ using NAudio.Wave.SampleProviders;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -689,10 +691,30 @@ namespace TekNET
 						MyCOMPort.Write("SNAK");
 						goto ST;
 					}
-					Console.Beep();
-					goto ST;
 				case '4':
 					Console.Clear();
+					string[] lline;
+				L:
+					//string LPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Logs\\TONEOUT.log";
+					string LPATH = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) + "\\Logs\\TONEOUT.log";
+					try
+					{
+						lline = File.ReadAllLines(LPATH);
+					}
+					catch (Exception e)
+					{
+						Console.WriteLine("");
+						Console.WriteLine("Log File Missing");
+						Console.Beep();
+						Console.Beep();
+						Console.Beep();
+						Console.ReadKey();
+						goto L;
+					}
+					foreach (string s in lline)
+					{
+						Console.WriteLine(s);
+					}
 					break;
 
 				case '5':
@@ -709,7 +731,7 @@ namespace TekNET
 						if (CMD == 'M' || CMD == 'm')
 						{
 							Console.WriteLine("Page Out");
-							log.Info("Test Page ");
+							log.Info("TP: Test Page ");
 							RS232RELAYOPEN(P.COMT);
 							using (var synthesizer = new SpeechSynthesizer())
 							{
@@ -786,7 +808,7 @@ namespace TekNET
 								}
 
 								Console.WriteLine("Page Out - " + T);
-								log.Info("Test Page -" + T);
+								log.Info("TP: Test Page -" + T);
 
 								//Console.Beep(FT, 1000);
 								//Console.Beep(ST, 3000);
@@ -862,15 +884,15 @@ namespace TekNET
 				Console.BackgroundColor = ConsoleColor.White;
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Page Out");
-				log.Info("Page Out");
+				log.Info("PO: Page Out");
 				Console.WriteLine("Priority: " + pri);
-				log.Info("Priority: " + pri);
+				log.Info("PO: Priority: " + pri);
 				if (techs != null)
 				{
 					foreach (string S in techs)
 					{
 						Console.WriteLine("Tech: " + S);
-						log.Info("Tech: " + S);
+						log.Info("PO: Tech: " + S);
 					}
 				}
 				else
@@ -879,7 +901,7 @@ namespace TekNET
 				}
 
 				Console.WriteLine("Message: " + message);
-				log.Info("Message: " + message);
+				log.Info("PO: Message: " + message);
 				Console.ResetColor();
 				RS232RELAYOPEN(COMR);
 				using (var synthesizer = new SpeechSynthesizer())
