@@ -5,7 +5,11 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TekNET", "TekNET\TekNET.csproj", "{FC1F00A0-846E-4B4E-902E-4158C7687EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartData", "StartData\StartData.csproj", "{79C345ED-ED1E-45B2-9F77-DB64D1C071E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartData", "StartData\StartData.csproj", "{79C345ED-ED1E-45B2-9F77-DB64D1C071E5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TekNET V2", "TekNET V2\TekNET V2.csproj", "{4663ADFB-2825-4FCF-8662-A14A69B3D090}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TekNET Test Pager", "TekNET Test Pager\TekNET Test Pager.csproj", "{D51A9050-7F1B-45F8-9E31-871CCAB9EE29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{79C345ED-ED1E-45B2-9F77-DB64D1C071E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79C345ED-ED1E-45B2-9F77-DB64D1C071E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79C345ED-ED1E-45B2-9F77-DB64D1C071E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4663ADFB-2825-4FCF-8662-A14A69B3D090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4663ADFB-2825-4FCF-8662-A14A69B3D090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4663ADFB-2825-4FCF-8662-A14A69B3D090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4663ADFB-2825-4FCF-8662-A14A69B3D090}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51A9050-7F1B-45F8-9E31-871CCAB9EE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51A9050-7F1B-45F8-9E31-871CCAB9EE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51A9050-7F1B-45F8-9E31-871CCAB9EE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51A9050-7F1B-45F8-9E31-871CCAB9EE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

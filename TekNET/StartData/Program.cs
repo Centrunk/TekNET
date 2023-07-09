@@ -57,7 +57,7 @@ namespace StartData
 				using (SerialPort MyCOMPort = new SerialPort())
 				{
 					//COM port settings to 8N1 mode
-					MyCOMPort.PortName = "COM6";          // Name of the COM port
+					MyCOMPort.PortName = "COM11";          // Name of the COM port
 					MyCOMPort.BaudRate = 115200;               // Baudrate = 9600bps
 					MyCOMPort.Parity = Parity.None;        // Parity bits = none
 					MyCOMPort.DataBits = 8;                  // No of Data bits = 8

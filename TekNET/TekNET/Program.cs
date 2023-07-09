@@ -19,6 +19,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
+using System.Timers;
+using Timer = System.Timers.Timer;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+
+//using System.Timers;
 
 /*
 * Tek entrys will only contain the name, All Tech Specific settings (Tone Pairs) will be in individual TXT files
@@ -44,11 +49,15 @@ namespace TekNET
 		internal string COMP = null;
 		internal string COMT = null;
 		internal string ADP = null;
+		internal bool STRIG = false;
+		private static Timer aTimer = new System.Timers.Timer(5000);
 
 		private static void Main(string[] args)
 		{
 			Program P = new Program();
 			Dictionary<int, string> TEK = new Dictionary<int, string>();
+			aTimer.Elapsed += new ElapsedEventHandler(OnSecdEvent);
+			aTimer.Enabled = true;
 			P.Techs = null;
 			P.COMP = null;
 			P.COMT = null;
@@ -124,16 +133,16 @@ namespace TekNET
 				SetAgain:
 					/*Config
 				     *ER = Transmitter Comport
-				     *EC = Env Mon Comport
+				     *EM = Env Mon Comport
 				     *B = Back
 					 */
 					string NCOM;
 					Console.Clear();
 
-					Console.Write("Radio COM: ");
+					Console.Write("Radio COM R: ");
 					Console.Write(P.COMP);
 					Console.WriteLine("");
-					Console.Write("ENV Mon COM: ");
+					Console.Write("ENV Mon COM M: ");
 					Console.Write(P.COMT);
 					Console.WriteLine("");
 					CMD = Console.ReadKey().KeyChar;
@@ -405,6 +414,7 @@ namespace TekNET
 
 				case '3':
 					String RxedData = null;             // String to store received data
+					RELAYport(true);
 					SerialPort MyCOMPort = new SerialPort(); //new SerialPort Object
 
 					//COM port settings to 8N1 mode
@@ -751,6 +761,7 @@ namespace TekNET
 						else if (CMD == 'T' || CMD == 't')
 						{
 							Console.WriteLine("Multiple? Y/N");
+							//TODO: Finish adding multiple techs page out
 							Console.Clear();
 							i = 1;
 							foreach (string S in TEK.Values)
@@ -866,6 +877,68 @@ namespace TekNET
 					goto A;
 			}
 			Console.ReadLine();
+		}
+
+		internal static void OnSecdEvent(object source, ElapsedEventArgs e)
+		{
+			Program P = new Program();
+			string DTN = DateTime.Now.ToString("hh:mm tt");
+			bool TTS = false;
+			if (DTN == "12:00 PM")
+			{
+				TTS = true;
+				P.STRIG = true;
+			}
+			if (DTN == "09:49 PM")
+			{
+				TTS = true;
+				P.STRIG = true;
+			}
+			else if (DTN == "12:45 PM")
+			{
+				P.STRIG = false;
+			}
+
+			//Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
+			if (TTS == true)
+			{
+				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Alert9.wav"))
+				{
+					using (var synthesizer = new SpeechSynthesizer())
+					{
+						string FPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\";
+
+						DirectoryInfo d = new DirectoryInfo(FPATH);
+						synthesizer.SetOutputToDefaultAudioDevice();
+						foreach (var file in d.GetFiles("*.txt"))
+						{
+							int iiiiiiii = 0;
+							string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
+
+							string[] lines = null;
+							double FT = 0;
+							double ST = 0;
+
+							if (iiiiiiii == 0)
+							{
+								iiiiiiii = 1;
+								lines = File.ReadAllLines(TPATH);
+								FT = double.Parse(lines[0]);
+								ST = double.Parse(lines[1]);
+								Sin(FT, 1);
+								//TODO: Figure out why each tone is playing twice
+								FT = 0;
+								Sin(ST, 3);
+								ST = 0;
+								Thread.Sleep(2500);
+								iiiiiiii = 0;
+							}
+						}
+						player.PlaySync();
+						synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Pageing System. Technet Out");
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -1009,21 +1082,45 @@ namespace TekNET
 				MyCOMPort.Parity = Parity.None;        // Parity bits = none
 				MyCOMPort.DataBits = 8;                  // No of Data bits = 8
 				MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
-
-				try
-				{
-					MyCOMPort.Open();   // Open the port
-				}
-				catch (Exception Ex)
-				{
-				}
 				try
 				{
 					MyCOMPort.Write("A");                    // Write an ascii "a"
 				}
-				catch (Exception Ex) { }
+				catch (Exception ex) { Console.WriteLine(ex.Message); }
+			}
+		}
 
-				MyCOMPort.Close();
+		/// <summary>
+		/// Open and Close the relay port
+		/// OOC = true is open
+		/// OOC = false is close
+		/// </summary>
+		/// <param name="OOC"></param>
+		internal static void RELAYport(bool OOC)
+		{
+			string jsonString;
+			jsonString = File.ReadAllText(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Conf.TNCONF");
+			CONF? CONFO = JsonSerializer.Deserialize<CONF>(jsonString);
+			SerialPort MyCOMPort = new SerialPort();
+			MyCOMPort.PortName = CONFO.COMT;          // Name of the COM port
+			MyCOMPort.BaudRate = 9600;               // Baudrate = 9600bps
+			MyCOMPort.Parity = Parity.None;        // Parity bits = none
+			MyCOMPort.DataBits = 8;                  // No of Data bits = 8
+			MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
+			try
+			{
+				if (OOC == true)
+				{
+					MyCOMPort.Open();
+				}
+				else
+				{
+					MyCOMPort.Close();
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
 			}
 		}
 
@@ -1044,20 +1141,14 @@ namespace TekNET
 				MyCOMPort.Parity = Parity.None;        // Parity bits = none
 				MyCOMPort.DataBits = 8;                  // No of Data bits = 8
 				MyCOMPort.StopBits = StopBits.One;       // No of Stop bits = 1
-
-				try
-				{
-					MyCOMPort.Open();   // Open the port
-				}
-				catch (Exception Ex)
-				{
-				}
 				try
 				{
 					MyCOMPort.Write("a");                    // Write an ascii "a"
 				}
-				catch (Exception Ex) { }
-				MyCOMPort.Close();
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
 			}
 		}
 
