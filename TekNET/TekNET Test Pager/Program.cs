@@ -57,11 +57,12 @@ namespace TekNET
 			string DTN = DateTime.Now.ToString("hh:mm tt");
 			Console.WriteLine(DTN);
 
-			if (DTN == "12:00 PM" || DTN == "04:25 PM")
+			if (DTN == "12:00 PM")
 			{
 				if (ran == false)
 				{
 					ran = true;
+				R:
 					Console.Clear();
 					Console.BackgroundColor = ConsoleColor.Red;
 					Console.WriteLine("Trigger");
@@ -95,12 +96,12 @@ namespace TekNET
 									FT = 0;
 									Sin(ST, 3);
 									ST = 0;
-									Thread.Sleep(1000);
+									Thread.Sleep(700);
 									iiiiiiii = 0;
 								}
 							}
 							player.PlaySync();
-							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System. This is only a test. If this were a real emergency, you would be instructed to tune to your local news or weather station for further information. This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt"));
+							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, This is only a test, If this were a real emergency, you would be instructed to tune to your local news or weather station for further information, This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
 						}
 					}
 				}
@@ -114,68 +115,6 @@ namespace TekNET
 			Console.Clear();
 			goto A;
 		}
-
-		/*internal static void OnSecdEvent(object source, ElapsedEventArgs e)
-		{
-			Program P = new Program();
-
-			bool TTS = false;
-			if (DTN == "12:00 PM")
-			{
-				TTS = true;
-				P.STRIG = true;
-			}
-			if (DTN == "09:49 PM")
-			{
-				TTS = true;
-				P.STRIG = true;
-			}
-			else if (DTN == "12:45 PM")
-			{
-				P.STRIG = false;
-			}
-
-			//Console.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
-			if (TTS == true)
-			{
-				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Alert9.wav"))
-				{
-					using (var synthesizer = new SpeechSynthesizer())
-					{
-						string FPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\";
-
-						DirectoryInfo d = new DirectoryInfo(FPATH);
-						synthesizer.SetOutputToDefaultAudioDevice();
-						foreach (var file in d.GetFiles("*.txt"))
-						{
-							int iiiiiiii = 0;
-							string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
-
-							string[] lines = null;
-							double FT = 0;
-							double ST = 0;
-
-							if (iiiiiiii == 0)
-							{
-								iiiiiiii = 1;
-								lines = File.ReadAllLines(TPATH);
-								FT = double.Parse(lines[0]);
-								ST = double.Parse(lines[1]);
-								Sin(FT, 1);
-								//TODO: Figure out why each tone is playing twice
-								FT = 0;
-								Sin(ST, 3);
-								ST = 0;
-								Thread.Sleep(2500);
-								iiiiiiii = 0;
-							}
-						}
-						player.PlaySync();
-						synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Pageing System. Technet Out");
-					}
-				}
-			}
-		}*/
 
 		/// <summary>
 		/// Starts a toneout, Requires a Message, String Array of techs, the Radio Comport, and The Priority
