@@ -43,7 +43,6 @@ namespace TekNET
 			Console.WriteLine(@"      _______\/\\\_______\//\\///////___\/\\\///\\\___\/\\\__\//\\\\\\_\//\\///////______\/\\\_/\\_____\///_____ ");
 			Console.WriteLine(@"       _______\/\\\________\//\\\\\\\\\\_\/\\\_\///\\\_\/\\\___\//\\\\\__\//\\\\\\\\\\____\//\\\\\_______/\\\____");
 			Console.WriteLine(@"        _______\///__________\//////////__\///____\///__\///_____\/////____\//////////______\/////_______\///_____");
-
 			int i;
 			i = 3;
 			do
@@ -54,7 +53,7 @@ namespace TekNET
 
 			Console.WriteLine("Running");
 			Console.WriteLine("");
-			string DTN = DateTime.Now.ToString("hh:mm tt");
+			string DTN = ("12:00 PM");
 			Console.WriteLine(DTN);
 
 			if (DTN == "12:00 PM")
@@ -65,7 +64,7 @@ namespace TekNET
 				R:
 					Console.Clear();
 					Console.BackgroundColor = ConsoleColor.Red;
-					Console.WriteLine("Trigger");
+					Console.WriteLine("Trigger Instant");
 					Console.WriteLine(DTN);
 					Console.ResetColor();
 
@@ -81,9 +80,8 @@ namespace TekNET
 							{
 								int iiiiiiii = 0;
 								string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
-
-								string[] lines = null;
 								Console.WriteLine(file.Name);
+								string[] lines = null;
 								double FT = 0;
 								double ST = 0;
 
@@ -102,7 +100,7 @@ namespace TekNET
 								}
 							}
 							player.PlaySync();
-							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, This is only a test, If this were a real emergency, you would be instructed to tune to your local news or weather station for further information, This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
+							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, This is only a test, If this were a real emergency, you would be instructed to tune to your local news or weather station for further information, This concludes this test of the Centex Trunked Radio System Quick Call Two System,Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time Tech Net Clear");
 						}
 					}
 				}
@@ -114,7 +112,6 @@ namespace TekNET
 
 			Thread.Sleep(1000);
 			Console.Clear();
-			goto A;
 		}
 
 		/// <summary>
@@ -227,7 +224,6 @@ namespace TekNET
 							Sin(1000, 8);
 							Thread.Sleep(1000);
 						}
-
 						player.PlaySync();
 						synthesizer.Speak(message);
 					}
