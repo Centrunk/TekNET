@@ -31,8 +31,9 @@ namespace TekNET
 			Logger log = LogManager.GetCurrentClassLogger();
 			bool ran = false;
 			bool ranso = false;
-		A:
+
 			Console.Clear();
+		A:
 			Console.WriteLine("Centex Trunked Radio System");
 			Console.WriteLine("V1.1");
 			Console.WriteLine(@"__/\\\\\\\\\\\\\\\_______________________________/\\\\\_____/\\\__________________________________/\\\____");
@@ -55,15 +56,17 @@ namespace TekNET
 
 			Console.WriteLine("Running");
 			Console.WriteLine("");
+			Console.WriteLine("");
+		T:
 			string DTN = DateTime.Now.ToString("hh:mm tt");
-			Console.WriteLine(DTN);
+			string DTNS = DateTime.Now.ToString("hh:mm:ss tt");
+			Console.Write(DTNS);
 
-			if (DTN == "12:05 PM")
+			if (DTN == "A:A1 PM")
 			{
 				if (ran == false)
 				{
 					ran = true;
-				R:
 					Console.Clear();
 					Console.BackgroundColor = ConsoleColor.Red;
 					Console.WriteLine("Trigger");
@@ -103,22 +106,43 @@ namespace TekNET
 								}
 							}
 							player.PlaySync();
-							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, Test   1     2      3      4,  5,    6    7    8   9, END , This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
+							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, Test   1     2      3      4,  5,    6    7    8   9, END , This concludes this test of the Centex Trunked Radio System Quick Call Two System, The Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
+							Console.Clear();
 						}
 					}
+					goto A;
 				}
+			}
+			else if (DTN == "11:00 PM")
+			{
+				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\SO2.wav"))
+				{
+					player.PlaySync();
+					Console.Clear();
+				}
+				goto A;
 			}
 			else if (DTN == "12:20 PM")
 			{
-			}
-			if (DTN == "12:20 PM")
-			{
 				ran = false;
+				goto T;
 			}
+			else
+			{
+				Thread.Sleep(1000);
 
-			Thread.Sleep(1000);
-			Console.Clear();
-			goto A;
+				ClearCurrentConsoleLine();
+				goto T;
+			}
+			Console.WriteLine("Done");
+		}
+
+		public static void ClearCurrentConsoleLine()
+		{
+			int currentLineCursor = Console.CursorTop;
+			Console.SetCursorPosition(0, Console.CursorTop);
+			Console.Write(new string(' ', Console.WindowWidth));
+			Console.SetCursorPosition(0, currentLineCursor);
 		}
 
 		public static void ClearLastLine()
