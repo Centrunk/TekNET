@@ -30,6 +30,7 @@ namespace TekNET
 			Program P = new Program();
 			Logger log = LogManager.GetCurrentClassLogger();
 			bool ran = false;
+			bool ranso = false;
 		A:
 			Console.Clear();
 			Console.WriteLine("Centex Trunked Radio System");
@@ -57,7 +58,7 @@ namespace TekNET
 			string DTN = DateTime.Now.ToString("hh:mm tt");
 			Console.WriteLine(DTN);
 
-			if (DTN == "12:00 PM")
+			if (DTN == "12:05 PM")
 			{
 				if (ran == false)
 				{
@@ -102,10 +103,13 @@ namespace TekNET
 								}
 							}
 							player.PlaySync();
-							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, This is only a test, If this were a real emergency, you would be instructed to tune to your local news or weather station for further information, This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
+							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, Test   1     2      3      4,  5,    6    7    8   9, END , This concludes this test of the Centex Trunked Radio System Quick Call Two System.Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
 						}
 					}
 				}
+			}
+			else if (DTN == "12:20 PM")
+			{
 			}
 			if (DTN == "12:20 PM")
 			{
@@ -115,6 +119,13 @@ namespace TekNET
 			Thread.Sleep(1000);
 			Console.Clear();
 			goto A;
+		}
+
+		public static void ClearLastLine()
+		{
+			Console.SetCursorPosition(0, Console.CursorTop - 1);
+			Console.Write(new string(' ', Console.BufferWidth));
+			Console.SetCursorPosition(0, Console.CursorTop - 1);
 		}
 
 		/// <summary>
