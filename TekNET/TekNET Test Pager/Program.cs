@@ -31,11 +31,12 @@ namespace TekNET
 			Logger log = LogManager.GetCurrentClassLogger();
 			bool ran = false;
 			bool ranso = false;
+			bool ranho = false;
 
-			Console.Clear();
 		A:
+			Console.Clear();
 			Console.WriteLine("Centex Trunked Radio System");
-			Console.WriteLine("V1.1");
+			Console.WriteLine("V1.2CE");
 			Console.WriteLine(@"__/\\\\\\\\\\\\\\\_______________________________/\\\\\_____/\\\__________________________________/\\\____");
 			Console.WriteLine(@" _\///////\\\/////__________________/\\\_________\/\\\\\\___\/\\\________________________________/\\\\\\\__");
 			Console.WriteLine(@"  _______\/\\\______________________\/\\\_________\/\\\/\\\__\/\\\____________________/\\\_______/\\\\\\\\\_");
@@ -45,6 +46,7 @@ namespace TekNET
 			Console.WriteLine(@"      _______\/\\\_______\//\\///////___\/\\\///\\\___\/\\\__\//\\\\\\_\//\\///////______\/\\\_/\\_____\///_____ ");
 			Console.WriteLine(@"       _______\/\\\________\//\\\\\\\\\\_\/\\\_\///\\\_\/\\\___\//\\\\\__\//\\\\\\\\\\____\//\\\\\_______/\\\____");
 			Console.WriteLine(@"        _______\///__________\//////////__\///____\///__\///_____\/////____\//////////______\/////_______\///_____");
+			Console.WriteLine(@"                                                     Clock Edition");
 
 			int i;
 			i = 3;
@@ -59,10 +61,13 @@ namespace TekNET
 			Console.WriteLine("");
 		T:
 			string DTN = DateTime.Now.ToString("hh:mm tt");
+			string TN = DateTime.Now.ToString("hh mm tt");
+			string Date = DateTime.Now.ToString("dddd MMMM d");
 			string DTNS = DateTime.Now.ToString("hh:mm:ss tt");
+			string DTNMO = DateTime.Now.ToString("mm");
 			Console.Write(DTNS);
 
-			if (DTN == "A:A1 PM")
+			/*if (DTN == "A:A1 PM")
 			{
 				if (ran == false)
 				{
@@ -113,7 +118,7 @@ namespace TekNET
 					goto A;
 				}
 			}
-			else if (DTN == "11:00 PM")
+			else if (DTN == "A:0A PM")
 			{
 				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\SO2.wav"))
 				{
@@ -126,15 +131,35 @@ namespace TekNET
 			{
 				ran = false;
 				goto T;
-			}
-			else
+			}*/
+			if (DTNMO == "03")
 			{
-				Thread.Sleep(1000);
+				if (ranho == false)
+				{
+					ranho = true;
 
-				ClearCurrentConsoleLine();
+					using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\CHIME.wav"))
+					{
+						using (var synthesizer = new SpeechSynthesizer())
+						{
+							synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Teen);
+							player.PlaySync();
+							synthesizer.Speak("This is the University of Texas Amateur Radio club talkgroup on the C T R S Trunked Radio System. The current time is " + Date + " , " + TN + "Central Standard Time, Irina is Clear");
+						}
+					}
+					goto A;
+				}
+			}
+			else if (DTNMO == "05")
+			{
+				ranho = false;
 				goto T;
 			}
-			Console.WriteLine("Done");
+
+			Thread.Sleep(1000);
+
+			ClearCurrentConsoleLine();
+			goto T;
 		}
 
 		public static void ClearCurrentConsoleLine()
