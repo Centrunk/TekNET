@@ -84,7 +84,9 @@ namespace TekNET
 					Thread.Sleep(20);
 				}
 			}
+			Console.ForegroundColor = ConsoleColor.Green;
 			Console.WriteLine("Done.");
+			Console.ResetColor();
 
 			//Read Config file here
 			string CPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Config.notyml";
@@ -258,9 +260,11 @@ namespace TekNET
 
 				if (result.Status == System.Net.NetworkInformation.IPStatus.Success)
 				{
+					Console.ForegroundColor = ConsoleColor.Green;
 					Console.WriteLine("Online");
+					Console.ResetColor();
 				}
-				else { Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("NO INTERNET ACCESS"); Console.ResetColor(); }
+				else { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("NO INTERNET ACCESS"); Console.ResetColor(); }
 			}
 
 #if DEBUG
@@ -281,7 +285,9 @@ namespace TekNET
 			Console.WriteLine(@"        _______\///__________\//////////__\///____\///__\///_____\/////____\//////////______\/////_______\///_____");
 			if (clock == true)
 			{
+				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine(@"                                                     CLOCK ENABLED");
+				Console.ResetColor();
 			}
 			if (testpages == true)
 			{
