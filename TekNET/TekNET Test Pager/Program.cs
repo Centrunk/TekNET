@@ -321,7 +321,8 @@ namespace TekNET
 			string emsub = "";
 			bool imapcheck = false;
 			string checkval1 = "";
-			string highestlevel = "0";
+			int highestlevel = 3;
+			bool newalert = false;
 #if DEBUG
 			Console.Beep();
 			Console.WriteLine("Press any key to continue");
@@ -408,14 +409,8 @@ namespace TekNET
 					using (var cancel = new CancellationTokenSource())
 					{
 						client.Connect(imapaddress, 993, true, cancel.Token);
-
-						// If you want to disable an authentication mechanism,
-						// you can do so by removing the mechanism like this:
 						client.AuthenticationMechanisms.Remove("XOAUTH");
-
 						client.Authenticate(imapuser, imappass, cancel.Token);
-
-						// The Inbox folder is always available...
 						var inbox = client.Inbox;
 						inbox.Open(FolderAccess.ReadWrite, cancel.Token);
 
@@ -427,6 +422,24 @@ namespace TekNET
 							client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
 							emsub = message.Subject;
 
+							//Level 0 = Critical
+							//Level 1 = Major
+							//Level 2 = Commfail
+							if (emsub.Contains("Critical") == true)
+							{
+								highestlevel = 0;
+								newalert = true;
+							}
+							else if (emsub.Contains("CommFailure") == true)
+							{
+								highestlevel = 2;
+								newalert = true;
+							}
+							else if (emsub.Contains("Major") == true)
+							{
+								highestlevel = 1;
+								newalert = true;
+							}
 #if DEBUG
 							Console.WriteLine(emsub);
 #endif
@@ -494,7 +507,7 @@ namespace TekNET
 			else if (DTN == testpagetrigclear && ran == true && testpages == true)
 			{
 				ran = false;
-				goto T;
+				goto A;
 			}
 			else if (DTNMO == clocktrigtime && clock == true && ranho == false)
 			{
@@ -514,7 +527,91 @@ namespace TekNET
 			else if (DTNMO == clocktrigtimeclear.ToString() && ranho == true)
 			{
 				ranho = false;
-				goto T;
+				goto A;
+			}
+			else if (newalert == true)
+			{
+				newalert = false;
+
+				Console.Clear();
+				Console.BackgroundColor = ConsoleColor.Red;
+				Console.WriteLine("NEW PAGE");
+				Console.WriteLine(DTN);
+				Console.WriteLine("Highest Alert: " + highestlevel.ToString());
+				Console.ResetColor();
+				string alertsnd = "\\AO1.wav";
+				switch (highestlevel)
+				{
+					case 0:
+						alertsnd = "\\AO1.wav";
+						break;
+
+					case 1:
+						alertsnd = "\\Alert2.wav";
+						break;
+
+					case 2:
+						alertsnd = "\\Alert9.wav";
+						break;
+				}
+				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\" + alertsnd))
+				{
+					using (var synthesizer = new SpeechSynthesizer())
+					{
+						string FPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\";
+
+						DirectoryInfo d = new DirectoryInfo(FPATH);
+						synthesizer.SetOutputToDefaultAudioDevice();
+						foreach (var file in d.GetFiles("*.txt"))
+						{
+							int iiiiiiii = 0;
+							string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
+
+							string[] lines = null;
+							Console.WriteLine(file.Name);
+							double FT = 0;
+							double ST = 0;
+
+							if (iiiiiiii == 0)
+							{
+								iiiiiiii = 1;
+								lines = File.ReadAllLines(TPATH);
+								FT = double.Parse(lines[0]);
+								ST = double.Parse(lines[1]);
+								Sin(FT, 1);
+								FT = 0;
+								Sin(ST, 3);
+								ST = 0;
+								Thread.Sleep(700);
+								iiiiiiii = 0;
+							}
+						}
+
+						//TODO: Add Site parseing from email and pass the result to the pageout text
+						string alertlev = "TEK NET ERROR";
+						switch (highestlevel)
+						{
+							case 0:
+								alertlev = "Critical Alert";
+								break;
+
+							case 1:
+								alertlev = "Major Alert";
+								break;
+
+							case 2:
+								alertlev = "Comm Failure";
+								break;
+						}
+
+						string pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected. Respond immediately!";
+						player.PlaySync();
+						synthesizer.Speak(pageouttext);
+						Console.Clear();
+					}
+				}
+
+				goto A;
 			}
 
 			Thread.Sleep(1000);
