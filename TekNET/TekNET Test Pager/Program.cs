@@ -19,6 +19,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Net.NetworkInformation;
+using MailKit.Net.Imap;
+using MailKit.Search;
+using MailKit;
+using MimeKit;
 
 namespace TekNET
 {
@@ -49,6 +53,12 @@ namespace TekNET
 			string testpagetrigM = "20";
 			string testpagetrigAP = "PM";
 			string testpagetext = "This is a test of the Rose Telecom Tech Net paging solution. The current time is";
+			string imapaddress = "imap.server.com";
+			string imapuser = "user";
+			string imappass = "password";
+			string imapport = "993";
+			bool imapssl = true;
+			bool imapenab = false;
 
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
@@ -220,6 +230,48 @@ namespace TekNET
 						case "TTT:":
 							testpagetext = option;
 							break;
+
+						case "IMS:":
+							if (option.ToLower() == "true")
+							{
+								imapssl = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								imapssl = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "EIM:":
+							if (option.ToLower() == "true")
+							{
+								imapenab = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								imapenab = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "IMA:":
+							imapaddress = option;
+							break;
+
+						case "IMU:":
+							imapuser = option;
+							break;
+
+						case "IMP:":
+							imappass = option;
+							break;
 					}
 				}
 
@@ -266,7 +318,9 @@ namespace TekNET
 				}
 				else { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("NO INTERNET ACCESS"); Console.ResetColor(); }
 			}
-
+			string emsub = "";
+			bool imapcheck = false;
+			string checkval1 = "";
 #if DEBUG
 			Console.Beep();
 			Console.WriteLine("Press any key to continue");
@@ -335,6 +389,52 @@ namespace TekNET
 				DTNS = DateTime.Now.ToString("hh:mm:ss tt");
 			}
 			string DTNMO = DateTime.Now.ToString("mm");
+
+			if (imapcheck == true)
+			{
+				string newcheckval = DateTime.Now.ToString("mm");
+				if (newcheckval != checkval1)
+				{
+					imapcheck = false;
+					checkval1 = newcheckval;
+				}
+			}
+
+			if (imapenab == true && imapcheck == false)
+			{
+				using (var client = new ImapClient())
+				{
+					using (var cancel = new CancellationTokenSource())
+					{
+						client.Connect(imapaddress, 993, true, cancel.Token);
+
+						// If you want to disable an authentication mechanism,
+						// you can do so by removing the mechanism like this:
+						client.AuthenticationMechanisms.Remove("XOAUTH");
+
+						client.Authenticate(imapuser, imappass, cancel.Token);
+
+						// The Inbox folder is always available...
+						var inbox = client.Inbox;
+						inbox.Open(FolderAccess.ReadWrite, cancel.Token);
+
+						var query = SearchQuery.NotSeen;
+
+						foreach (var uid in inbox.Search(query, cancel.Token))
+						{
+							var message = inbox.GetMessage(uid, cancel.Token);
+							client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
+							emsub = message.Subject;
+#if DEBUG
+							Console.WriteLine(emsub);
+#endif
+						}
+
+						client.Disconnect(true, cancel.Token);
+					}
+				}
+				imapcheck = true;
+			}
 
 			Console.Write(DTNS);
 
