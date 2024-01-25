@@ -1,5 +1,5 @@
 ﻿/*
-*   Copyright (C) 2022 by N5UWU
+*   Copyright (C) 2024 by N5UWU
 *   This program is distributed WITHOUT WARRANTY.
 */
 
@@ -18,6 +18,7 @@ using System.Speech.Synthesis;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Net.NetworkInformation;
 
 namespace TekNET
 {
@@ -25,18 +26,250 @@ namespace TekNET
 	{
 		internal bool STRIG = false;
 
+		/// <summary>
+		/// Main Program
+		/// </summary>
+		/// <param name="args"></param>
 		private static void Main(string[] args)
 		{
 			Program P = new Program();
 			Logger log = LogManager.GetCurrentClassLogger();
 			bool ran = false;
-			bool ranso = false;
 			bool ranho = false;
 
+			//Options
+			bool clock = true;
+			string clockbtext = "This is the Rose Telecom Tech net paging solution. The time is";
+			string clockatext = "Zulu. Irina is clear";
+			string clocktrigtime = "03";
+			bool clock24h = true;
+			bool testpages = true;
+			bool pageout = true;
+			string testpagetrigH = "12";
+			string testpagetrigM = "20";
+			string testpagetrigAP = "PM";
+			string testpagetext = "This is a test of the Rose Telecom Tech Net paging solution. The current time is";
+
+			Console.Clear();
+			Console.ForegroundColor = ConsoleColor.Blue;
+			Console.WriteLine(@"**************************************");
+			Console.WriteLine(@"***********++++++************+********");
+			Console.WriteLine(@"**********:.    .**********-.=********");
+			Console.WriteLine(@"********-       .********-.  =********");
+			Console.WriteLine(@"******-.        .******=.    =********");
+			Console.WriteLine(@"****=.          .****=.      ......:**");
+			Console.WriteLine(@"***:       .*******=               :**");
+			Console.WriteLine(@"***:       .*****=.                :**");
+			Console.WriteLine(@"***:       .***+=-----:      :-----=**");
+			Console.WriteLine(@"***:       .**********=      =********");
+			Console.WriteLine(@"***:       .**********=      =********");
+			Console.WriteLine(@"***:       .**********=      =********");
+			Console.WriteLine(@"***:       .**********=.          .:**");
+			Console.WriteLine(@"***:       .***********-         .+***");
+			Console.WriteLine(@"***:       .************=.      :+****");
+			Console.WriteLine(@"***-::::::::**************+-...=******");
+			Console.WriteLine(@"**************************************");
+			Console.WriteLine(@"**************************************");
+			Console.ResetColor();
+			Console.WriteLine("");
+			Console.WriteLine("Rose Telecom");
+			Console.WriteLine("V1.5");
+
+			Console.Write("Loading Config Options... ");
+			using (var progress = new ProgressBar())
+			{
+				for (int ib = 0; ib <= 100; ib++)
+				{
+					progress.Report((double)ib / 100);
+					Thread.Sleep(20);
+				}
+			}
+			Console.WriteLine("Done.");
+
+			//Read Config file here
+			string CPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Config.notyml";
+
+			DirectoryInfo dd = new DirectoryInfo(CPATH);
+			string[] clines = null;
+
+			//Read Config File and set options
+			try
+			{
+				clines = File.ReadAllLines(CPATH);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				Console.WriteLine("Press any key to exit");
+				Console.ReadKey();
+				Environment.Exit(50);
+			}
+
+			Console.Write("Validating Config Options... ");
+			using (var progress = new ProgressBar())
+			{
+				for (int ib = 0; ib <= 100; ib++)
+				{
+					progress.Report((double)ib / 100);
+					Thread.Sleep(10);
+				}
+			}
+
+			string testpagetrigtime = "12:20 PM";
+			string testpagetrigclear = "12:45 PM";
+			int clocktrigtimeclear = 35;
+			try
+			{
+				int tmpcnt = 0;
+				foreach (string S in clines)
+				{
+					string str = S.Substring(0, 4);
+					string option = S.Substring(4, S.Length - 4);
+					tmpcnt++;
+#if DEBUG
+					Console.WriteLine("Config line " + tmpcnt.ToString() + @" . Cfg input >> " + S);
+#endif
+					switch (str)
+					{
+						case "CLK:":
+							if (option.ToLower() == "true")
+							{
+								clock = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								clock = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "CBT:":
+							clockbtext = option;
+							break;
+
+						case "CAT:":
+							clockatext = option;
+							break;
+
+						case "CTT:":
+							clocktrigtime = option;
+							break;
+
+						case "C24:":
+							if (option.ToLower() == "true")
+							{
+								clock24h = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								clock24h = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "TPE:":
+							if (option.ToLower() == "true")
+							{
+								testpages = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								testpages = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "POE:":
+							if (option.ToLower() == "true")
+							{
+								pageout = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								pageout = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
+
+						case "TTH:":
+							testpagetrigH = option;
+							break;
+
+						case "TTM:":
+							testpagetrigM = option;
+							break;
+
+						case "TTA:":
+							testpagetrigAP = option;
+							break;
+
+						case "TTT:":
+							testpagetext = option;
+							break;
+					}
+				}
+
+				//Set dynamic options
+				testpagetrigtime = testpagetrigH + ":" + testpagetrigM + " " + testpagetrigAP;
+				testpagetrigclear = testpagetrigH + (int.Parse(testpagetrigM) + 15) + testpagetrigAP;
+				clocktrigtimeclear = int.Parse(clocktrigtime) + 15;
+			}
+			catch (Exception ex)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Config file invalid");
+				Console.WriteLine();
+				Console.ResetColor();
+				Console.WriteLine(ex.Message);
+				Console.WriteLine("Press any key to exit");
+				Console.ReadKey();
+				Environment.Exit(55);
+			}
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Valid.");
+			Console.ResetColor();
+
+			if (pageout == true)
+			{
+				Console.Write("Validating Internet Access... ");
+				using (var progress = new ProgressBar())
+				{
+					for (int ib = 0; ib <= 100; ib++)
+					{
+						progress.Report((double)ib / 100);
+						Thread.Sleep(10);
+					}
+				}
+				var ping = new System.Net.NetworkInformation.Ping();
+
+				var result = ping.Send("www.rosesam.pw");
+
+				if (result.Status == System.Net.NetworkInformation.IPStatus.Success)
+				{
+					Console.WriteLine("Online");
+				}
+				else { Console.ForegroundColor = ConsoleColor.Green; Console.WriteLine("NO INTERNET ACCESS"); Console.ResetColor(); }
+			}
+
+#if DEBUG
+			Console.Beep();
+			Console.WriteLine("Press any key to continue");
+			Console.ReadKey();
+#endif
 		A:
 			Console.Clear();
-			Console.WriteLine("Centex Trunked Radio System");
-			Console.WriteLine("V1.2CE");
 			Console.WriteLine(@"__/\\\\\\\\\\\\\\\_______________________________/\\\\\_____/\\\__________________________________/\\\____");
 			Console.WriteLine(@" _\///////\\\/////__________________/\\\_________\/\\\\\\___\/\\\________________________________/\\\\\\\__");
 			Console.WriteLine(@"  _______\/\\\______________________\/\\\_________\/\\\/\\\__\/\\\____________________/\\\_______/\\\\\\\\\_");
@@ -46,7 +279,22 @@ namespace TekNET
 			Console.WriteLine(@"      _______\/\\\_______\//\\///////___\/\\\///\\\___\/\\\__\//\\\\\\_\//\\///////______\/\\\_/\\_____\///_____ ");
 			Console.WriteLine(@"       _______\/\\\________\//\\\\\\\\\\_\/\\\_\///\\\_\/\\\___\//\\\\\__\//\\\\\\\\\\____\//\\\\\_______/\\\____");
 			Console.WriteLine(@"        _______\///__________\//////////__\///____\///__\///_____\/////____\//////////______\/////_______\///_____");
-			Console.WriteLine(@"                                                     Clock Edition");
+			if (clock == true)
+			{
+				Console.WriteLine(@"                                                     CLOCK ENABLED");
+			}
+			if (testpages == true)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(@"                                                  TEST PAGES ENABLED");
+				Console.ResetColor();
+			}
+			if (pageout == true)
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(@"                                                   PAGE OUT ENABLED");
+				Console.ResetColor();
+			}
 
 			int i;
 			i = 3;
@@ -60,14 +308,31 @@ namespace TekNET
 			Console.WriteLine("");
 			Console.WriteLine("");
 		T:
+			string TN;
 			string DTN = DateTime.Now.ToString("hh:mm tt");
-			string TN = DateTime.Now.ToString("hh mm tt");
+			if (clock24h == true)
+			{
+				TN = DateTime.Now.ToString("HH mm");
+			}
+			else
+			{
+				TN = DateTime.Now.ToString("hh mm");
+			}
 			string Date = DateTime.Now.ToString("dddd MMMM d");
-			string DTNS = DateTime.Now.ToString("hh:mm:ss tt");
+			string DTNS;
+			if (clock24h == true)
+			{
+				DTNS = DateTime.Now.ToString("HH:mm:ss");
+			}
+			else
+			{
+				DTNS = DateTime.Now.ToString("hh:mm:ss tt");
+			}
 			string DTNMO = DateTime.Now.ToString("mm");
+
 			Console.Write(DTNS);
 
-			/*if (DTN == "A:A1 PM")
+			if (DTN == testpagetrigtime)
 			{
 				if (ran == false)
 				{
@@ -111,46 +376,34 @@ namespace TekNET
 								}
 							}
 							player.PlaySync();
-							synthesizer.Speak("This is a daily test of the Centex Trunked Radio System Quick Call Two System, Test   1     2      3      4,  5,    6    7    8   9, END , This concludes this test of the Centex Trunked Radio System Quick Call Two System, The Current time is " + DateTime.Now.ToString("hh:mm tt") + "Central Standard Time");
+							synthesizer.Speak(testpagetext + DateTime.Now.ToString("HH:mm"));
 							Console.Clear();
 						}
 					}
 					goto A;
 				}
 			}
-			else if (DTN == "A:0A PM")
-			{
-				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\SO2.wav"))
-				{
-					player.PlaySync();
-					Console.Clear();
-				}
-				goto A;
-			}
-			else if (DTN == "12:20 PM")
+			else if (DTN == testpagetrigclear && ran == true && testpages == true)
 			{
 				ran = false;
 				goto T;
-			}*/
-			if (DTNMO == "03")
-			{
-				if (ranho == false)
-				{
-					ranho = true;
-
-					using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\CHIME.wav"))
-					{
-						using (var synthesizer = new SpeechSynthesizer())
-						{
-							synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Teen);
-							player.PlaySync();
-							synthesizer.Speak("This is the University of Texas Amateur Radio club talkgroup on the C T R S Trunked Radio System. The current time is " + Date + " , " + TN + "Central Standard Time, Irina is Clear");
-						}
-					}
-					goto A;
-				}
 			}
-			else if (DTNMO == "05")
+			else if (DTNMO == clocktrigtime && clock == true && ranho == false)
+			{
+				ranho = true;
+
+				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\CHIME.wav"))
+				{
+					using (var synthesizer = new SpeechSynthesizer())
+					{
+						synthesizer.SelectVoiceByHints(VoiceGender.Female, VoiceAge.Teen);
+						player.PlaySync();
+						synthesizer.Speak(clockbtext + Date + " , " + TN + clockatext);
+					}
+				}
+				goto A;
+			}
+			else if (DTNMO == clocktrigtimeclear.ToString() && ranho == true)
 			{
 				ranho = false;
 				goto T;
@@ -162,6 +415,9 @@ namespace TekNET
 			goto T;
 		}
 
+		/// <summary>
+		/// Clears the current line in the console
+		/// </summary>
 		public static void ClearCurrentConsoleLine()
 		{
 			int currentLineCursor = Console.CursorTop;
@@ -170,6 +426,9 @@ namespace TekNET
 			Console.SetCursorPosition(0, currentLineCursor);
 		}
 
+		/// <summary>
+		/// Clears the last line in the console
+		/// </summary>
 		public static void ClearLastLine()
 		{
 			Console.SetCursorPosition(0, Console.CursorTop - 1);
