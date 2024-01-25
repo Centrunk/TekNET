@@ -321,6 +321,7 @@ namespace TekNET
 			string emsub = "";
 			bool imapcheck = false;
 			string checkval1 = "";
+			string highestlevel = "0";
 #if DEBUG
 			Console.Beep();
 			Console.WriteLine("Press any key to continue");
@@ -425,6 +426,7 @@ namespace TekNET
 							var message = inbox.GetMessage(uid, cancel.Token);
 							client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
 							emsub = message.Subject;
+
 #if DEBUG
 							Console.WriteLine(emsub);
 #endif
