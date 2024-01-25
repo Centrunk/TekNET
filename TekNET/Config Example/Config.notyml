@@ -1,0 +1,29 @@
+#Clock Enable
+CLK:true
+#Clock before text. Played before time
+/CBT:TEXT HERE
+#Clock after text. Played after time
+/CAT:Central Standard Time, Irina is Clear
+#Min to trigger hourly announcement
+CTT:03
+#Clock 24 hour time
+C24:true
+#Test Toneout Enable
+TPE:false
+#Pageout enable (ensure EIM is also enabled and IMAP info filled out)
+POE:true
+#Test Toneout Hour
+TTH:07
+#Test Toneout Min
+TTM:09
+#Test Toneout AM/PM
+TTD:PM
+#Test Toneout Text
+/TTT:TEXT HERE
+IMA:IMAP SERVER ADDRESS
+IMU:IMAP USERNAME
+IMP:IMAP PASSWOR
+#Imap SSL enable
+IMS:true
+#Imap Enable
+EIM:true

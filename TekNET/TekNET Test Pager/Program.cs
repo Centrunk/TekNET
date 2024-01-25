@@ -85,24 +85,44 @@ namespace TekNET
 			Console.WriteLine("Rose Telecom");
 			Console.WriteLine("V1.5");
 
-			Console.Write("Loading Config Options... ");
+			Console.Write("Loading Config File... ");
 			using (var progress = new ProgressBar())
 			{
 				for (int ib = 0; ib <= 100; ib++)
 				{
 					progress.Report((double)ib / 100);
-					Thread.Sleep(20);
+					Thread.Sleep(10);
 				}
 			}
-			Console.ForegroundColor = ConsoleColor.Green;
-			Console.WriteLine("Done.");
-			Console.ResetColor();
 
 			//Read Config file here
 			string CPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Config.notyml";
 
 			DirectoryInfo dd = new DirectoryInfo(CPATH);
 			string[] clines = null;
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Done.");
+			Console.ResetColor();
+
+			Console.Write("Loading Site Database File... ");
+			using (var progress = new ProgressBar())
+			{
+				for (int ib = 0; ib <= 100; ib++)
+				{
+					progress.Report((double)ib / 100);
+					Thread.Sleep(5);
+				}
+			}
+
+			string sPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\sitedb.notyml";
+
+			DirectoryInfo sd = new DirectoryInfo(sPATH);
+			string[] slines = null;
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Done.");
+			Console.ResetColor();
 
 			//Read Config File and set options
 			try
@@ -116,6 +136,45 @@ namespace TekNET
 				Console.ReadKey();
 				Environment.Exit(50);
 			}
+
+			Console.Write("Validating Site Database... ");
+			using (var progress = new ProgressBar())
+			{
+				for (int ib = 0; ib <= 100; ib++)
+				{
+					progress.Report((double)ib / 100);
+					Thread.Sleep(8);
+				}
+			}
+			Dictionary<string, string> sites = new Dictionary<string, string>();
+			try
+			{
+				slines = File.ReadAllLines(sPATH);
+				foreach (string S in slines)
+				{
+#if DEBUG
+					Console.WriteLine("Site input >> " + S);
+#endif
+					string[] site = S.Split(',');
+					sites.Add(site[0], site[1]);
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				Console.WriteLine();
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Site Database invalid");
+				Console.ResetColor();
+				Console.WriteLine();
+				Console.WriteLine("Press any key to exit");
+				Console.ReadKey();
+				Environment.Exit(51);
+			}
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.WriteLine("Valid.");
+			Console.ResetColor();
 
 			Console.Write("Validating Config Options... ");
 			using (var progress = new ProgressBar())
@@ -323,6 +382,8 @@ namespace TekNET
 			string checkval1 = "";
 			int highestlevel = 3;
 			bool newalert = false;
+			string alertsite = " Unknown ";
+
 #if DEBUG
 			Console.Beep();
 			Console.WriteLine("Press any key to continue");
@@ -422,6 +483,15 @@ namespace TekNET
 							client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
 							emsub = message.Subject;
 
+							//Check for the site name in the subject
+							foreach (string S in sites.Keys)
+							{
+								if (emsub.Contains(S) == true)
+								{
+									alertsite = sites[S];
+								}
+							}
+
 							//Level 0 = Critical
 							//Level 1 = Major
 							//Level 2 = Commfail
@@ -430,12 +500,12 @@ namespace TekNET
 								highestlevel = 0;
 								newalert = true;
 							}
-							else if (emsub.Contains("CommFailure") == true)
+							else if (emsub.Contains("CommFailure") == true && highestlevel != 0)
 							{
 								highestlevel = 2;
 								newalert = true;
 							}
-							else if (emsub.Contains("Major") == true)
+							else if (emsub.Contains("Major") == true && highestlevel != 0 && highestlevel != 2)
 							{
 								highestlevel = 1;
 								newalert = true;
@@ -604,9 +674,11 @@ namespace TekNET
 								break;
 						}
 
-						string pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected. Respond immediately!";
+						string pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
 						player.PlaySync();
 						synthesizer.Speak(pageouttext);
+						highestlevel = 3;
+						alertsite = " Unknown ";
 						Console.Clear();
 					}
 				}
