@@ -1,3 +1,4 @@
+#Fill out, be sure to remove "/"s!
 #Clock Enable
 CLK:true
 #Clock before text. Played before time
@@ -12,6 +13,8 @@ C24:true
 TPE:false
 #Pageout enable (ensure EIM is also enabled and IMAP info filled out)
 POE:true
+#UEM Email Advanced Parse
+UEM:true
 #Test Toneout Hour
 TTH:07
 #Test Toneout Min

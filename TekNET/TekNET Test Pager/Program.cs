@@ -40,6 +40,7 @@ namespace TekNET
 			Logger log = LogManager.GetCurrentClassLogger();
 			bool ran = false;
 			bool ranho = false;
+			Dictionary<string, string[]> msgs = new Dictionary<string, string[]>();
 
 			//Options
 			bool clock = true;
@@ -59,6 +60,7 @@ namespace TekNET
 			string imapport = "993";
 			bool imapssl = true;
 			bool imapenab = false;
+			bool UEMadv = false;
 
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
@@ -132,6 +134,7 @@ namespace TekNET
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
+				Console.WriteLine("ERR 50: Config File Read Fail");
 				Console.WriteLine("Press any key to exit");
 				Console.ReadKey();
 				Environment.Exit(50);
@@ -152,11 +155,14 @@ namespace TekNET
 				slines = File.ReadAllLines(sPATH);
 				foreach (string S in slines)
 				{
+					if (S[0] != '#')
+					{
+						string[] site = S.Split(',');
+						sites.Add(site[0], site[1]);
+					}
 #if DEBUG
 					Console.WriteLine("Site input >> " + S);
 #endif
-					string[] site = S.Split(',');
-					sites.Add(site[0], site[1]);
 				}
 			}
 			catch (Exception ex)
@@ -166,6 +172,7 @@ namespace TekNET
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Site Database invalid");
 				Console.ResetColor();
+				Console.WriteLine("ERR 51: Site DB Inv");
 				Console.WriteLine();
 				Console.WriteLine("Press any key to exit");
 				Console.ReadKey();
@@ -182,7 +189,7 @@ namespace TekNET
 				for (int ib = 0; ib <= 100; ib++)
 				{
 					progress.Report((double)ib / 100);
-					Thread.Sleep(10);
+					Thread.Sleep(5);
 				}
 			}
 
@@ -331,6 +338,21 @@ namespace TekNET
 						case "IMP:":
 							imappass = option;
 							break;
+
+						case "UEM:":
+							if (option.ToLower() == "true")
+							{
+								UEMadv = true;
+							}
+							else if (option.ToLower() == "false")
+							{
+								UEMadv = false;
+							}
+							else
+							{
+								throw new Exception("Invalid Config Option");
+							}
+							break;
 					}
 				}
 
@@ -346,6 +368,8 @@ namespace TekNET
 				Console.WriteLine();
 				Console.ResetColor();
 				Console.WriteLine(ex.Message);
+				Console.WriteLine("ERR 55: Config File Inv");
+				Console.WriteLine();
 				Console.WriteLine("Press any key to exit");
 				Console.ReadKey();
 				Environment.Exit(55);
@@ -375,7 +399,22 @@ namespace TekNET
 					Console.WriteLine("Online");
 					Console.ResetColor();
 				}
-				else { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("NO INTERNET ACCESS"); Console.ResetColor(); }
+				else
+				{
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("NO INTERNET ACCESS");
+					Console.ResetColor();
+					if (pageout == true)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine("No internet access detected while Pageouts are enabled. Application Stopped");
+						Console.ResetColor();
+						Console.WriteLine("ERR 69 :Ping test of  www.rosesam.pw  failed");
+						Console.WriteLine("Press any key to exit");
+						Console.ReadKey();
+						Environment.Exit(69);
+					}
+				}
 			}
 			string emsub = "";
 			bool imapcheck = false;
@@ -418,6 +457,11 @@ namespace TekNET
 				Console.WriteLine(@"                                                   PAGE OUT ENABLED");
 				Console.ResetColor();
 			}
+#if DEBUG
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine(@"                                                   DEBUG MODE");
+				Console.ResetColor();
+#endif
 
 			int i;
 			i = 3;
@@ -469,12 +513,12 @@ namespace TekNET
 				{
 					using (var cancel = new CancellationTokenSource())
 					{
+						Console.Write("Checking Email");
 						client.Connect(imapaddress, 993, true, cancel.Token);
 						client.AuthenticationMechanisms.Remove("XOAUTH");
 						client.Authenticate(imapuser, imappass, cancel.Token);
 						var inbox = client.Inbox;
 						inbox.Open(FolderAccess.ReadWrite, cancel.Token);
-
 						var query = SearchQuery.NotSeen;
 
 						foreach (var uid in inbox.Search(query, cancel.Token))
@@ -492,32 +536,67 @@ namespace TekNET
 								}
 							}
 
-							//Level 0 = Critical
-							//Level 1 = Major
-							//Level 2 = Commfail
+							/*Level 0 = Critical
+							Level 1 = Major
+							Level 2 = Commfail
+							Level 10 = Warning
+							Level 55 = Test*/
+							int level = 3;
 							if (emsub.Contains("Critical") == true)
 							{
 								highestlevel = 0;
+								level = 0;
 								newalert = true;
 							}
-							else if (emsub.Contains("CommFailure") == true && highestlevel != 0)
+							else if (emsub.Contains("CommFailure") == true)
 							{
-								highestlevel = 2;
+								if (highestlevel != 0)
+								{
+									highestlevel = 2;
+								}
+
+								level = 2;
 								newalert = true;
 							}
-							else if (emsub.Contains("Major") == true && highestlevel != 0 && highestlevel != 2)
+							else if (emsub.Contains("Major") == true)
 							{
-								highestlevel = 1;
+								if (highestlevel != 0 && highestlevel != 2)
+								{
+									highestlevel = 1;
+								}
+								level = 1;
+								newalert = true;
+							}
+							else if (emsub.Contains("Warning") == true)
+							{
+								if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
+								{
+									highestlevel = 10;
+								}
+								level = 10;
+								newalert = true;
+							}
+							else if (emsub.Contains("TEST") == true)
+							{
+								if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
+								{
+									highestlevel = 55;
+								}
+								level = 55;
 								newalert = true;
 							}
 #if DEBUG
 							Console.WriteLine(emsub);
 #endif
+							string[] bdytgmd = new string[2];
+							bdytgmd[2] = message.TextBody;
+							bdytgmd[1] = level.ToString();
 						}
 
 						client.Disconnect(true, cancel.Token);
 					}
 				}
+				ClearCurrentConsoleLine();
 				imapcheck = true;
 			}
 
@@ -602,87 +681,160 @@ namespace TekNET
 			else if (newalert == true)
 			{
 				newalert = false;
-
 				Console.Clear();
-				Console.BackgroundColor = ConsoleColor.Red;
-				Console.WriteLine("NEW PAGE");
-				Console.WriteLine(DTN);
-				Console.WriteLine("Highest Alert: " + highestlevel.ToString());
-				Console.ResetColor();
-				string alertsnd = "\\AO1.wav";
-				switch (highestlevel)
+				if (0 != 1)
 				{
-					case 0:
-						alertsnd = "\\AO1.wav";
-						break;
-
-					case 1:
-						alertsnd = "\\Alert2.wav";
-						break;
-
-					case 2:
-						alertsnd = "\\Alert9.wav";
-						break;
+					Console.WriteLine("###########################++---------------------------------..");
+					Console.WriteLine("############################+-----------------------------------");
+					Console.WriteLine("#########+###################+---------------------------------.");
+					Console.WriteLine("#######++++++++##############++---------------------+####+------");
+					Console.WriteLine("########++++++++##############+-----------------++######+--.....");
+					Console.WriteLine("########++++++++##############++++++++++-----++########++------.");
+					Console.WriteLine("########+++++++##########################++++##########+--------");
+					Console.WriteLine("########+++++++#######################################+---------");
+					Console.WriteLine("##########+++++###################++++++++++########+++---------");
+					Console.WriteLine("##########+++###############+++++++++++----+++######++----------");
+					Console.WriteLine("#########################+++######+---+----+++#######+----------");
+					Console.WriteLine("##################################+++++-..--+#######+#+---------");
+					Console.WriteLine("########################++#######++++---.---+#-#####+##+--------");
+					Console.WriteLine("########################++#####++#+-....-----++###+++#++--------");
+					Console.WriteLine("#########################++####+--.....----------+++#++---------");
+					Console.WriteLine("#######################+##++++--.......--++------+####+---------");
+					Console.WriteLine("###########################++--..........----+----+##+----------");
+					Console.WriteLine("####################++++++++----........---++-.----+#+----------");
+					Console.WriteLine("##################++++#++++++------..----++--------+++----------");
+					Console.WriteLine("######################+++++++++-------++##+++------++-----------");
+					Console.WriteLine("#####################+++#++--++++###++#######+----+#+-----------");
+					Console.WriteLine("#####################++++-+++###############+++++#+++-----------");
+					Console.WriteLine("###############+++++------+####+###################+------------");
+					Console.WriteLine("####++########+++----------+#++++++++++##########+++------------");
+					Console.WriteLine("####++++++++++--------------+++++++++++#+++++++++++-------------");
+					Console.WriteLine("####++++++--------------------+++++++-++---+++++++--------------");
+					Console.WriteLine("####++++++----------------------+++++-+-----++++++--------------");
+					Console.WriteLine("###++++++++--------------------------++----+++++++++------------");
+					Console.WriteLine("####+++++++++-------+++++-----##+---+++---++-+++++++++----------");
+					Console.WriteLine("#####++++++++++--++++++++-----+###+##+++++++++++++++------------");
+					Console.WriteLine("#######++++++++++++++++++++-----++#####++++++++++++-------------");
+					Console.WriteLine("#######++++++++++++++++++++++++#######+++++++++++++-------------");
+					Console.WriteLine("########++-------++++++++++++++#######++++++++++++++++----------");
+					Console.WriteLine("########+++-------+++++++++++#########++++++++++++++-++---------");
+					Console.WriteLine("#########+++------+++++++++###########++++++++++++++++----------");
 				}
-				using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\" + alertsnd))
+				foreach (string[] S in msgs.Values)
 				{
-					using (var synthesizer = new SpeechSynthesizer())
+					Console.BackgroundColor = ConsoleColor.Red;
+					Console.WriteLine("NEW PAGE");
+					Console.WriteLine(DTN);
+					Console.WriteLine("Highest Alert: " + highestlevel.ToString());
+					Console.WriteLine("Current Level: " + S[1]);
+					Console.WriteLine("Site: " + alertsite);
+					Console.ResetColor();
+					int curlevel = int.Parse(S[1]);
+					string alertsnd = "\\AO1.wav";
+					switch (curlevel)
 					{
-						string FPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\";
+						case 0:
+							alertsnd = "\\AO1.wav";
+							break;
 
-						DirectoryInfo d = new DirectoryInfo(FPATH);
-						synthesizer.SetOutputToDefaultAudioDevice();
-						foreach (var file in d.GetFiles("*.txt"))
+						case 1:
+							alertsnd = "\\Alert2.wav";
+							break;
+
+						case 2:
+							alertsnd = "\\Alert9.wav";
+							break;
+
+						case 10:
+							alertsnd = "\\Alert3.wav";
+							break;
+
+						case 55:
+							alertsnd = "\\CHIME.wav";
+							break;
+					}
+					using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\" + alertsnd))
+					{
+						using (var synthesizer = new SpeechSynthesizer())
 						{
-							int iiiiiiii = 0;
-							string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
+							string FPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\";
 
-							string[] lines = null;
-							Console.WriteLine(file.Name);
-							double FT = 0;
-							double ST = 0;
-
-							if (iiiiiiii == 0)
+							DirectoryInfo d = new DirectoryInfo(FPATH);
+							synthesizer.SetOutputToDefaultAudioDevice();
+							foreach (var file in d.GetFiles("*.txt"))
 							{
-								iiiiiiii = 1;
-								lines = File.ReadAllLines(TPATH);
-								FT = double.Parse(lines[0]);
-								ST = double.Parse(lines[1]);
-								Sin(FT, 1);
-								FT = 0;
-								Sin(ST, 3);
-								ST = 0;
-								Thread.Sleep(700);
-								iiiiiiii = 0;
+								int iiiiiiii = 0;
+								string TPATH = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\Techs\\" + file.Name;
+
+								string[] lines = null;
+								Console.WriteLine(file.Name);
+								double FT = 0;
+								double ST = 0;
+
+								if (iiiiiiii == 0)
+								{
+									iiiiiiii = 1;
+									lines = File.ReadAllLines(TPATH);
+									FT = double.Parse(lines[0]);
+									ST = double.Parse(lines[1]);
+									Sin(FT, 1);
+									FT = 0;
+									Sin(ST, 3);
+									ST = 0;
+									Thread.Sleep(700);
+									iiiiiiii = 0;
+								}
 							}
+
+							//TODO: Add multiple page support
+							//TODO: Add Site parseing from email and pass the result to the pageout text
+							string alertlev = "TEK NET ERROR";
+							switch (highestlevel)
+							{
+								case 0:
+									alertlev = "Critical Alert";
+									break;
+
+								case 1:
+									alertlev = "Major Alert";
+									break;
+
+								case 2:
+									alertlev = "Comm Failure";
+									break;
+
+								case 10:
+									alertlev = "Warning";
+									break;
+
+								case 55:
+									alertlev = "Test Alert";
+									break;
+							}
+							string pageouttext = "ERROR, ERROR, ERROR,ERROR, ERROR, ERROR";
+
+							if (highestlevel == 55)
+							{
+								pageouttext = "This is a test pageout. This test could have been sent out by UEM or by a manual email. If this test was not expected please contact your system administrator";
+							}
+							else if (UEMadv == false)
+							{
+								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
+							}
+							else if (UEMadv == true)
+							{
+								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
+							}
+							else if{ }
+
+							player.PlaySync();
+							synthesizer.Speak(pageouttext);
+							highestlevel = 3;
+							alertsite = " Unknown ";
+							Console.Clear();
 						}
-
-						//TODO: Add Site parseing from email and pass the result to the pageout text
-						string alertlev = "TEK NET ERROR";
-						switch (highestlevel)
-						{
-							case 0:
-								alertlev = "Critical Alert";
-								break;
-
-							case 1:
-								alertlev = "Major Alert";
-								break;
-
-							case 2:
-								alertlev = "Comm Failure";
-								break;
-						}
-
-						string pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
-						player.PlaySync();
-						synthesizer.Speak(pageouttext);
-						highestlevel = 3;
-						alertsite = " Unknown ";
-						Console.Clear();
 					}
 				}
-
 				goto A;
 			}
 
@@ -728,6 +880,46 @@ namespace TekNET
 				Console.WriteLine("");
 				Console.BackgroundColor = ConsoleColor.White;
 				Console.ForegroundColor = ConsoleColor.Red;
+
+				if (0 == 0)
+				{
+					Console.WriteLine("###########################++---------------------------------..");
+					Console.WriteLine("############################+-----------------------------------");
+					Console.WriteLine("#########+###################+---------------------------------.");
+					Console.WriteLine("#######++++++++##############++---------------------+####+------");
+					Console.WriteLine("########++++++++##############+-----------------++######+--.....");
+					Console.WriteLine("########++++++++##############++++++++++-----++########++------.");
+					Console.WriteLine("########+++++++##########################++++##########+--------");
+					Console.WriteLine("########+++++++#######################################+---------");
+					Console.WriteLine("##########+++++###################++++++++++########+++---------");
+					Console.WriteLine("##########+++###############+++++++++++----+++######++----------");
+					Console.WriteLine("#########################+++######+---+----+++#######+----------");
+					Console.WriteLine("##################################+++++-..--+#######+#+---------");
+					Console.WriteLine("########################++#######++++---.---+#-#####+##+--------");
+					Console.WriteLine("########################++#####++#+-....-----++###+++#++--------");
+					Console.WriteLine("#########################++####+--.....----------+++#++---------");
+					Console.WriteLine("#######################+##++++--.......--++------+####+---------");
+					Console.WriteLine("###########################++--..........----+----+##+----------");
+					Console.WriteLine("####################++++++++----........---++-.----+#+----------");
+					Console.WriteLine("##################++++#++++++------..----++--------+++----------");
+					Console.WriteLine("######################+++++++++-------++##+++------++-----------");
+					Console.WriteLine("#####################+++#++--++++###++#######+----+#+-----------");
+					Console.WriteLine("#####################++++-+++###############+++++#+++-----------");
+					Console.WriteLine("###############+++++------+####+###################+------------");
+					Console.WriteLine("####++########+++----------+#++++++++++##########+++------------");
+					Console.WriteLine("####++++++++++--------------+++++++++++#+++++++++++-------------");
+					Console.WriteLine("####++++++--------------------+++++++-++---+++++++--------------");
+					Console.WriteLine("####++++++----------------------+++++-+-----++++++--------------");
+					Console.WriteLine("###++++++++--------------------------++----+++++++++------------");
+					Console.WriteLine("####+++++++++-------+++++-----##+---+++---++-+++++++++----------");
+					Console.WriteLine("#####++++++++++--++++++++-----+###+##+++++++++++++++------------");
+					Console.WriteLine("#######++++++++++++++++++++-----++#####++++++++++++-------------");
+					Console.WriteLine("#######++++++++++++++++++++++++#######+++++++++++++-------------");
+					Console.WriteLine("########++-------++++++++++++++#######++++++++++++++++----------");
+					Console.WriteLine("########+++-------+++++++++++#########++++++++++++++-++---------");
+					Console.WriteLine("#########+++------+++++++++###########++++++++++++++++----------");
+				}
+
 				Console.WriteLine("Page Out");
 				log.Info("PO: Page Out");
 				Console.WriteLine("Priority: " + pri);
