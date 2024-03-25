@@ -23,6 +23,7 @@ using MailKit.Net.Imap;
 using MailKit.Search;
 using MailKit;
 using MimeKit;
+using Microsoft.VisualBasic;
 
 namespace TekNET
 {
@@ -61,6 +62,7 @@ namespace TekNET
 			bool imapssl = true;
 			bool imapenab = false;
 			bool UEMadv = false;
+			bool MULTIFAIL = false;
 
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
@@ -458,9 +460,9 @@ namespace TekNET
 				Console.ResetColor();
 			}
 #if DEBUG
-				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine(@"                                                   DEBUG MODE");
-				Console.ResetColor();
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.WriteLine(@"                                                   DEBUG MODE");
+			Console.ResetColor();
 #endif
 
 			int i;
@@ -509,6 +511,8 @@ namespace TekNET
 
 			if (imapenab == true && imapcheck == false)
 			{
+				//try
+				//{
 				using (var client = new ImapClient())
 				{
 					using (var cancel = new CancellationTokenSource())
@@ -520,7 +524,6 @@ namespace TekNET
 						var inbox = client.Inbox;
 						inbox.Open(FolderAccess.ReadWrite, cancel.Token);
 						var query = SearchQuery.NotSeen;
-
 						foreach (var uid in inbox.Search(query, cancel.Token))
 						{
 							var message = inbox.GetMessage(uid, cancel.Token);
@@ -536,6 +539,11 @@ namespace TekNET
 								}
 							}
 
+							//string[0] = Level
+							//string[1] = Location
+							//string[2] = Message (make "TEST" for rn")
+							string[] tmparrsl = new string[4];
+
 							/*Level 0 = Critical
 							Level 1 = Major
 							Level 2 = Commfail
@@ -546,7 +554,29 @@ namespace TekNET
 							{
 								highestlevel = 0;
 								level = 0;
-								newalert = true;
+								if (newalert == true)
+								{
+									MULTIFAIL = true;
+								}
+								else
+								{
+									newalert = true;
+								}
+								tmparrsl[0] = "0";
+								tmparrsl[1] = "Critical Alarm";
+								tmparrsl[2] = alertsite;
+								tmparrsl[3] = "TEST";
+								int key1 = 0;
+								try
+								{
+									key1 = msgs.Count + 1;
+								}
+								catch (Exception ex)
+								{
+									key1 = 0;
+								}
+
+								msgs.Add(key1.ToString(), tmparrsl);
 							}
 							else if (emsub.Contains("CommFailure") == true)
 							{
@@ -554,9 +584,21 @@ namespace TekNET
 								{
 									highestlevel = 2;
 								}
-
 								level = 2;
-								newalert = true;
+								if (newalert == true)
+								{
+									MULTIFAIL = true;
+								}
+								else
+								{
+									newalert = true;
+								}
+								tmparrsl[0] = "2";
+								tmparrsl[1] = "Comunications Failure";
+								tmparrsl[2] = alertsite;
+								tmparrsl[3] = "TEST";
+								int key = msgs.Count + 1;
+								msgs.Add(key.ToString(), tmparrsl);
 							}
 							else if (emsub.Contains("Major") == true)
 							{
@@ -565,7 +607,20 @@ namespace TekNET
 									highestlevel = 1;
 								}
 								level = 1;
-								newalert = true;
+								if (newalert == true)
+								{
+									MULTIFAIL = true;
+								}
+								else
+								{
+									newalert = true;
+								}
+								tmparrsl[0] = "1";
+								tmparrsl[1] = "Major Alarm";
+								tmparrsl[2] = alertsite;
+								tmparrsl[3] = "TEST";
+								int key = msgs.Count + 1;
+								msgs.Add(key.ToString(), tmparrsl);
 							}
 							else if (emsub.Contains("Warning") == true)
 							{
@@ -574,7 +629,20 @@ namespace TekNET
 									highestlevel = 10;
 								}
 								level = 10;
-								newalert = true;
+								if (newalert == true)
+								{
+									MULTIFAIL = true;
+								}
+								else
+								{
+									newalert = true;
+								}
+								tmparrsl[0] = "10";
+								tmparrsl[1] = "Warning";
+								tmparrsl[2] = alertsite;
+								tmparrsl[3] = "TEST";
+								int key = msgs.Count + 1;
+								msgs.Add(key.ToString(), tmparrsl);
 							}
 							else if (emsub.Contains("TEST") == true)
 							{
@@ -589,13 +657,24 @@ namespace TekNET
 							Console.WriteLine(emsub);
 #endif
 							string[] bdytgmd = new string[2];
-							bdytgmd[2] = message.TextBody;
-							bdytgmd[1] = level.ToString();
+							bdytgmd[1] = message.TextBody;
+							bdytgmd[0] = level.ToString();
 						}
 
 						client.Disconnect(true, cancel.Token);
 					}
 				}
+
+				//}
+				//catch (Exception ex)
+				//{
+				//	log.Error(ex.Message);
+#if DEBUG
+
+				//	Console.WriteLine(ex.Message);
+#endif
+
+				//}
 				ClearCurrentConsoleLine();
 				imapcheck = true;
 			}
@@ -729,7 +808,7 @@ namespace TekNET
 					Console.WriteLine("Current Level: " + S[1]);
 					Console.WriteLine("Site: " + alertsite);
 					Console.ResetColor();
-					int curlevel = int.Parse(S[1]);
+					int curlevel = int.Parse(S[0]);
 					string alertsnd = "\\AO1.wav";
 					switch (curlevel)
 					{
@@ -752,6 +831,10 @@ namespace TekNET
 						case 55:
 							alertsnd = "\\CHIME.wav";
 							break;
+					}
+					if (MULTIFAIL == true)
+					{
+						alertsnd = "\\Alert7.wav";
 					}
 					using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\" + alertsnd))
 					{
@@ -785,56 +868,77 @@ namespace TekNET
 									iiiiiiii = 0;
 								}
 							}
+							string alertlev = "TEK NET ERROR";
+							string pageouttext = "ERROR, ERROR, ERROR,ERROR, ERROR, ERROR";
+
+							if (MULTIFAIL == false)
+							{
+								switch (highestlevel)
+								{
+									case 0:
+										alertlev = "Critical Alert";
+										break;
+
+									case 1:
+										alertlev = "Major Alert";
+										break;
+
+									case 2:
+										alertlev = "Comm Failure";
+										break;
+
+									case 10:
+										alertlev = "Warning";
+										break;
+
+									case 55:
+										alertlev = "Test Alert";
+										break;
+								}
+							}
 
 							//TODO: Add multiple page support
 							//TODO: Add Site parseing from email and pass the result to the pageout text
-							string alertlev = "TEK NET ERROR";
-							switch (highestlevel)
-							{
-								case 0:
-									alertlev = "Critical Alert";
-									break;
-
-								case 1:
-									alertlev = "Major Alert";
-									break;
-
-								case 2:
-									alertlev = "Comm Failure";
-									break;
-
-								case 10:
-									alertlev = "Warning";
-									break;
-
-								case 55:
-									alertlev = "Test Alert";
-									break;
-							}
-							string pageouttext = "ERROR, ERROR, ERROR,ERROR, ERROR, ERROR";
-
-							if (highestlevel == 55)
-							{
-								pageouttext = "This is a test pageout. This test could have been sent out by UEM or by a manual email. If this test was not expected please contact your system administrator";
-							}
-							else if (UEMadv == false)
-							{
-								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
-							}
-							else if (UEMadv == true)
-							{
-								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
-							}
-							else if{ }
 
 							player.PlaySync();
-							synthesizer.Speak(pageouttext);
+
+							if (MULTIFAIL == false && highestlevel == 55)
+							{
+								pageouttext = "This is a test pageout. This test could have been sent out by UEM or by a manual email. If this test was not expected please contact your system administrator";
+								synthesizer.Speak(pageouttext);
+							}
+							else if (MULTIFAIL == false && UEMadv == false)
+							{
+								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
+								synthesizer.Speak(pageouttext);
+							}
+							else if (MULTIFAIL == false && UEMadv == true)
+							{
+								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
+								synthesizer.Speak(pageouttext);
+							}
+							else if (MULTIFAIL == true)
+							{
+								pageouttext = "ATTENTION. ATTENTION. MULTIPLE ALERTS DETECTED. Details to follow.";
+								synthesizer.Speak(pageouttext);
+								foreach (string[] s in msgs.Values)
+								{
+									alertlev = s[1];
+									alertsite = s[2];
+									pageouttext = alertlev + "detected at " + alertsite;
+									synthesizer.Speak(pageouttext);
+								}
+							}
+							msgs.Clear();
+							MULTIFAIL = false;
 							highestlevel = 3;
 							alertsite = " Unknown ";
+
 							Console.Clear();
 						}
 					}
 				}
+
 				goto A;
 			}
 
