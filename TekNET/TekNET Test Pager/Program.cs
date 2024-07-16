@@ -24,6 +24,9 @@ using MailKit.Search;
 using MailKit;
 using MimeKit;
 using Microsoft.VisualBasic;
+using System.Windows.Forms;
+using Windows.Graphics.Printing;
+using System.CodeDom;
 
 namespace TekNET
 {
@@ -63,6 +66,7 @@ namespace TekNET
 			bool imapenab = false;
 			bool UEMadv = false;
 			bool MULTIFAIL = false;
+			string messages = "TEKNET ERROR";
 
 			Console.Clear();
 			Console.ForegroundColor = ConsoleColor.Blue;
@@ -511,170 +515,173 @@ namespace TekNET
 
 			if (imapenab == true && imapcheck == false)
 			{
-				//try
-				//{
-				using (var client = new ImapClient())
+				try
 				{
-					using (var cancel = new CancellationTokenSource())
+					using (var client = new ImapClient())
 					{
-						Console.Write("Checking Email");
-						client.Connect(imapaddress, 993, true, cancel.Token);
-						client.AuthenticationMechanisms.Remove("XOAUTH");
-						client.Authenticate(imapuser, imappass, cancel.Token);
-						var inbox = client.Inbox;
-						inbox.Open(FolderAccess.ReadWrite, cancel.Token);
-						var query = SearchQuery.NotSeen;
-						foreach (var uid in inbox.Search(query, cancel.Token))
+						using (var cancel = new CancellationTokenSource())
 						{
-							var message = inbox.GetMessage(uid, cancel.Token);
-							client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
-							emsub = message.Subject;
-
-							//Check for the site name in the subject
-							foreach (string S in sites.Keys)
+							Console.Write("Checking Email");
+							client.Connect(imapaddress, 993, true, cancel.Token);
+							client.AuthenticationMechanisms.Remove("XOAUTH");
+							client.Authenticate(imapuser, imappass, cancel.Token);
+							var inbox = client.Inbox;
+							inbox.Open(FolderAccess.ReadWrite, cancel.Token);
+							var query = SearchQuery.NotSeen;
+							foreach (var uid in inbox.Search(query, cancel.Token))
 							{
-								if (emsub.Contains(S) == true)
-								{
-									alertsite = sites[S];
-								}
-							}
+								var message = inbox.GetMessage(uid, cancel.Token);
+								client.Inbox.AddFlags(uid, MessageFlags.Seen, true, cancel.Token);
+								emsub = message.Subject;
 
-							//string[0] = Level
-							//string[1] = Location
-							//string[2] = Message (make "TEST" for rn")
-							string[] tmparrsl = new string[4];
-
-							/*Level 0 = Critical
-							Level 1 = Major
-							Level 2 = Commfail
-							Level 10 = Warning
-							Level 55 = Test*/
-							int level = 3;
-							if (emsub.Contains("Critical") == true)
-							{
-								highestlevel = 0;
-								level = 0;
-								if (newalert == true)
+								//Check for the site name in the subject
+								foreach (string S in sites.Keys)
 								{
-									MULTIFAIL = true;
-								}
-								else
-								{
-									newalert = true;
-								}
-								tmparrsl[0] = "0";
-								tmparrsl[1] = "Critical Alarm";
-								tmparrsl[2] = alertsite;
-								tmparrsl[3] = "TEST";
-								int key1 = 0;
-								try
-								{
-									key1 = msgs.Count + 1;
-								}
-								catch (Exception ex)
-								{
-									key1 = 0;
+									if (emsub.Contains(S) == true)
+									{
+										alertsite = sites[S];
+									}
 								}
 
-								msgs.Add(key1.ToString(), tmparrsl);
-							}
-							else if (emsub.Contains("CommFailure") == true)
-							{
-								if (highestlevel != 0)
+								//string[0] = Level
+								//string[1] = Level Text
+								//string[2] = Location
+								//string[3] = Message (make "TEST" for rn")
+								string[] tmparrsl = new string[4];
+
+								/*Level 0 = Critical
+								Level 1 = Major
+								Level 2 = Commfail
+								Level 10 = Warning
+								Level 55 = Test*/
+								int level = 3;
+
+								string textbody = message.TextBody;
+
+								var separators = new[] { '\r', '\n' };
+								var lines = textbody.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+								messages = lines[1];
+
+								if (emsub.Contains("Critical") == true)
 								{
-									highestlevel = 2;
+									highestlevel = 0;
+									level = 0;
+									if (newalert == true)
+									{
+										MULTIFAIL = true;
+									}
+									else
+									{
+										newalert = true;
+									}
+									tmparrsl[0] = "0";
+									tmparrsl[1] = "Critical Alarm";
+									tmparrsl[2] = alertsite;
+									tmparrsl[3] = messages;
+									int key1 = 0;
+									try
+									{
+										key1 = msgs.Count + 1;
+									}
+									catch (Exception ex)
+									{
+										key1 = 0;
+									}
+
+									msgs.Add(key1.ToString(), tmparrsl);
 								}
-								level = 2;
-								if (newalert == true)
+								else if (emsub.Contains("CommFailure") == true)
 								{
-									MULTIFAIL = true;
+									if (highestlevel != 0)
+									{
+										highestlevel = 2;
+									}
+									level = 2;
+									if (newalert == true)
+									{
+										MULTIFAIL = true;
+									}
+									else
+									{
+										newalert = true;
+									}
+									tmparrsl[0] = "2";
+									tmparrsl[1] = "Comunications Failure";
+									tmparrsl[2] = alertsite;
+									tmparrsl[3] = messages;
+									int key = msgs.Count + 1;
+									msgs.Add(key.ToString(), tmparrsl);
 								}
-								else
+								else if (emsub.Contains("Major") == true)
 								{
+									if (highestlevel != 0 && highestlevel != 2)
+									{
+										highestlevel = 1;
+									}
+									level = 1;
+									if (newalert == true)
+									{
+										MULTIFAIL = true;
+									}
+									else
+									{
+										newalert = true;
+									}
+									tmparrsl[0] = "1";
+									tmparrsl[1] = "Major Alarm";
+									tmparrsl[2] = alertsite;
+									tmparrsl[3] = messages;
+									int key = msgs.Count + 1;
+									msgs.Add(key.ToString(), tmparrsl);
+								}
+								else if (emsub.Contains("Warning") == true)
+								{
+									if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
+									{
+										highestlevel = 10;
+									}
+									level = 10;
+									if (newalert == true)
+									{
+										MULTIFAIL = true;
+									}
+									else
+									{
+										newalert = true;
+									}
+									tmparrsl[0] = "10";
+									tmparrsl[1] = "Warning";
+									tmparrsl[2] = alertsite;
+									tmparrsl[3] = messages;
+									int key = msgs.Count + 1;
+									msgs.Add(key.ToString(), tmparrsl);
+								}
+								else if (emsub.Contains("TEST") == true)
+								{
+									if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
+									{
+										highestlevel = 55;
+									}
+									level = 55;
 									newalert = true;
 								}
-								tmparrsl[0] = "2";
-								tmparrsl[1] = "Comunications Failure";
-								tmparrsl[2] = alertsite;
-								tmparrsl[3] = "TEST";
-								int key = msgs.Count + 1;
-								msgs.Add(key.ToString(), tmparrsl);
-							}
-							else if (emsub.Contains("Major") == true)
-							{
-								if (highestlevel != 0 && highestlevel != 2)
-								{
-									highestlevel = 1;
-								}
-								level = 1;
-								if (newalert == true)
-								{
-									MULTIFAIL = true;
-								}
-								else
-								{
-									newalert = true;
-								}
-								tmparrsl[0] = "1";
-								tmparrsl[1] = "Major Alarm";
-								tmparrsl[2] = alertsite;
-								tmparrsl[3] = "TEST";
-								int key = msgs.Count + 1;
-								msgs.Add(key.ToString(), tmparrsl);
-							}
-							else if (emsub.Contains("Warning") == true)
-							{
-								if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
-								{
-									highestlevel = 10;
-								}
-								level = 10;
-								if (newalert == true)
-								{
-									MULTIFAIL = true;
-								}
-								else
-								{
-									newalert = true;
-								}
-								tmparrsl[0] = "10";
-								tmparrsl[1] = "Warning";
-								tmparrsl[2] = alertsite;
-								tmparrsl[3] = "TEST";
-								int key = msgs.Count + 1;
-								msgs.Add(key.ToString(), tmparrsl);
-							}
-							else if (emsub.Contains("TEST") == true)
-							{
-								if (highestlevel != 0 && highestlevel != 2 && highestlevel != 1)
-								{
-									highestlevel = 55;
-								}
-								level = 55;
-								newalert = true;
-							}
 #if DEBUG
-							Console.WriteLine(emsub);
+								Console.WriteLine(emsub);
 #endif
-							string[] bdytgmd = new string[2];
-							bdytgmd[1] = message.TextBody;
-							bdytgmd[0] = level.ToString();
-						}
+							}
 
-						client.Disconnect(true, cancel.Token);
+							client.Disconnect(true, cancel.Token);
+						}
 					}
 				}
-
-				//}
-				//catch (Exception ex)
-				//{
-				//	log.Error(ex.Message);
+				catch (Exception ex)
+				{
+					log.Error(ex.Message);
 #if DEBUG
 
-				//	Console.WriteLine(ex.Message);
+					Console.WriteLine(ex.Message);
 #endif
-
-				//}
+				}
 				ClearCurrentConsoleLine();
 				imapcheck = true;
 			}
@@ -897,42 +904,50 @@ namespace TekNET
 								}
 							}
 
-							//TODO: Add multiple page support
-							//TODO: Add Site parseing from email and pass the result to the pageout text
-
 							player.PlaySync();
-
-							if (MULTIFAIL == false && highestlevel == 55)
+							using (System.Media.SoundPlayer player2 = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + "\\" + "\\YEEHAW.wav"))
 							{
-								pageouttext = "This is a test pageout. This test could have been sent out by UEM or by a manual email. If this test was not expected please contact your system administrator";
-								synthesizer.Speak(pageouttext);
-							}
-							else if (MULTIFAIL == false && UEMadv == false)
-							{
-								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
-								synthesizer.Speak(pageouttext);
-							}
-							else if (MULTIFAIL == false && UEMadv == true)
-							{
-								pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
-								synthesizer.Speak(pageouttext);
-							}
-							else if (MULTIFAIL == true)
-							{
-								pageouttext = "ATTENTION. ATTENTION. MULTIPLE ALERTS DETECTED. Details to follow.";
-								synthesizer.Speak(pageouttext);
-								foreach (string[] s in msgs.Values)
+								if (MULTIFAIL == false && highestlevel == 55)
 								{
-									alertlev = s[1];
-									alertsite = s[2];
-									pageouttext = alertlev + "detected at " + alertsite;
+									pageouttext = "This is a test pageout. This test could have been sent out by UEM or by a manual email. If this test was not expected please contact your system administrator";
 									synthesizer.Speak(pageouttext);
+								}
+								else if (MULTIFAIL == false && UEMadv == false)
+								{
+									pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
+									synthesizer.Speak(pageouttext);
+								}
+								else if (MULTIFAIL == false && UEMadv == true)
+								{
+									pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
+									synthesizer.Speak(pageouttext);
+									pageouttext = messages;
+									synthesizer.Speak("Alarm Message." + pageouttext);
+									player2.PlaySync();
+								}
+								else if (MULTIFAIL == true)
+								{
+									pageouttext = "LETS ROLL THEM. MULTIPLE ALERTS DETECTED. Details to follow.";
+									synthesizer.Speak(pageouttext);
+									foreach (string[] s in msgs.Values)
+									{
+										alertlev = s[1];
+										alertsite = s[2];
+										messages = s[3];
+										pageouttext = alertlev + "detected at " + alertsite + "." + "Alarm Message," + messages;
+										synthesizer.Speak(pageouttext);
+									}
+									TN = DateTime.Now.ToString("HH mm");
+									pageouttext = "Irina Clear," + TN;
+									synthesizer.Speak(pageouttext);
+									player2.Play();
 								}
 							}
 							msgs.Clear();
 							MULTIFAIL = false;
 							highestlevel = 3;
 							alertsite = " Unknown ";
+							messages = "TEKNET ERROR";
 
 							Console.Clear();
 						}
