@@ -3,6 +3,8 @@
 *   This program is distributed WITHOUT WARRANTY.
 */
 
+//TODO: Add ability to route pages based on site ID/do page groups or something. idk Thats a problem for Future Nyx
+
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using NLog;
