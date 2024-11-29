@@ -520,7 +520,32 @@ namespace TekNet_Refactor
 								}
 								else if (MULTIFAIL == false && opt.UEMadv == false)
 								{
-									pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
+
+									pageouttext = "ATTENTION ATTENTION " + alertlev + "detected at " + alertsite + " Respond immediately!";
+
+									char[] whitespace = new char[] { ' ', '\t' };
+									string[] ssizes = pageouttext.Split(whitespace);
+									foreach (string messagess in ssizes)
+									{
+										try
+										{
+											//this is dirty and needs to be done better...
+											string alert = "\\Voice\\" + messagess.ToLower() + ".wav";
+
+											using (System.Media.SoundPlayer playa = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + alert))
+											{
+												playa.Play();
+												Thread.Sleep(300);
+											}
+
+										}
+										catch (Exception ex)
+										{
+											synthesizer.Speak(messagess);
+										}
+									}
+
+									
 									synthesizer.Speak(pageouttext);
 								}
 								else if (MULTIFAIL == false && opt.UEMadv == true)

@@ -29,6 +29,7 @@ using Microsoft.VisualBasic;
 using System.Windows.Forms;
 using Windows.Graphics.Printing;
 using System.CodeDom;
+using System.Text.RegularExpressions;
 
 namespace TekNET
 {
@@ -893,7 +894,7 @@ namespace TekNET
 										break;
 
 									case 2:
-										alertlev = "Comm Failure";
+										alertlev = "comfailure";
 										break;
 
 									case 10:
@@ -916,15 +917,127 @@ namespace TekNET
 								}
 								else if (MULTIFAIL == false && UEMadv == false)
 								{
-									pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Respond immediately!";
-									synthesizer.Speak(pageouttext);
+
+									pageouttext = "ATTENTION . ATTENTION . " + alertlev + " detected at " + alertsite + " respond immediately";
+#if DEBUG
+									Console.WriteLine(messages);
+#endif
+									char[] whitespace = new char[] { ' ', '\t' };
+									string[] ssizes = pageouttext.Split(whitespace);
+									foreach (string messagess in ssizes)
+									{
+
+										try
+										{
+											//this is dirty and needs to be done better...
+											string alert = "\\Voice\\" + messagess.ToLower() + ".wav";
+
+											using (System.Media.SoundPlayer playa = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + alert))
+											{
+												if (messagess != ".") 
+												{
+													playa.PlaySync();
+												}
+												if (messagess == ".")
+												{
+													Thread.Sleep(700);
+												}
+												
+											}
+
+										}
+										catch (Exception ex)
+										{
+#if DEBUG
+											Console.WriteLine("Cant find " + messagess + ".wav");
+
+#endif
+											synthesizer.Speak(messagess);
+										}
+									}
 								}
 								else if (MULTIFAIL == false && UEMadv == true)
 								{
-									pageouttext = "ATTENTION. ATTENTION. " + alertlev + "detected at " + alertsite + ". Details to follow.";
-									synthesizer.Speak(pageouttext);
-									pageouttext = messages;
-									synthesizer.Speak("Alarm Message." + pageouttext);
+									pageouttext = "ATTENTION . ATTENTION . " + alertlev + " detected at " + alertsite + " . Details to follow .";
+
+#if DEBUG
+									Console.WriteLine(messages);
+#endif
+									char[] whitespace = new char[] { ' ', '\t' };
+									string[] ssizes = pageouttext.Split(whitespace);
+									foreach (string messagess in ssizes)
+									{
+
+										try
+										{
+											var pattern = new Regex("[:!@#$%^&*()}{|\":?><\\;'/.,~]");
+											pattern.Replace(messagess, "");
+											//this is dirty and needs to be done better...
+											string alert = "\\Voice\\" + messagess.ToLower() + ".wav";
+
+											using (System.Media.SoundPlayer playa = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + alert))
+											{
+												if (messagess != "." || messages != " " || messages != " . ")
+												{
+													playa.PlaySync();
+												}
+												if (messagess == ".")
+												{
+													Thread.Sleep(700);
+												}
+
+											}
+
+										}
+										catch (Exception ex)
+										{
+#if DEBUG
+											Console.WriteLine("Cant find " + messagess + ".wav");
+
+#endif
+											synthesizer.Speak(messagess);
+										}
+									}
+									pageouttext = "Alarm Message . " + messages;
+									
+
+#if DEBUG
+									Console.WriteLine(messages);
+#endif
+									ssizes = pageouttext.Split(whitespace);
+									foreach (string messagess in ssizes)
+									{
+
+										try
+										{
+											var pattern = new Regex("[:!@#$%^&*()}{|\":?><\\;'/.,~]");
+											pattern.Replace(messagess, "");
+											//this is dirty and needs to be done better...
+											string alert = "\\Voice\\" + messagess.ToLower() + ".wav";
+
+											using (System.Media.SoundPlayer playa = new System.Media.SoundPlayer(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..")) + alert))
+											{
+												if (messagess != "." || messages != " " || messages != " . ")
+												{
+													playa.PlaySync();
+												}
+												if (messagess == ".")
+												{
+													Thread.Sleep(700);
+												}
+
+											}
+
+										}
+										catch (Exception ex)
+										{
+#if DEBUG
+											Console.WriteLine("Cant find " + messagess + ".wav");
+
+#endif
+											synthesizer.Speak(messagess);
+										}
+									}
 									player2.PlaySync();
 								}
 								else if (MULTIFAIL == true)
