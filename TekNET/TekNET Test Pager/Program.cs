@@ -959,7 +959,7 @@ namespace TekNET
 								else if (MULTIFAIL == false && UEMadv == true)
 								{
 									pageouttext = "ATTENTION . ATTENTION . " + alertlev + " detected at " + alertsite + " . Details to follow .";
-
+									pageouttext = pageouttext.ToLower();
 #if DEBUG
 									Console.WriteLine(messages);
 #endif
@@ -998,7 +998,7 @@ namespace TekNET
 											synthesizer.Speak(messagess);
 										}
 									}
-									pageouttext = "Alarm Message . " + messages;
+									pageouttext = "Alarm Message . " + messages.ToLower();
 									
 
 #if DEBUG
@@ -1021,7 +1021,7 @@ namespace TekNET
 												{
 													playa.PlaySync();
 												}
-												if (messagess == ".")
+												if (messagess == "." || messages == " . ")
 												{
 													Thread.Sleep(700);
 												}
