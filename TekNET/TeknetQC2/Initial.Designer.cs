@@ -28,13 +28,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Initial));
 			savebut = new Button();
 			comboBox1 = new ComboBox();
 			AudioOutDropLab = new Label();
 			rs232pttcmd = new Label();
 			textBox1 = new TextBox();
 			svrstatus = new Button();
-			textBox2 = new TextBox();
+			svraddrtxt = new TextBox();
 			serveraddrlab = new Label();
 			tstpagebut = new Button();
 			listBox1 = new ListBox();
@@ -45,12 +46,13 @@
 			// 
 			// savebut
 			// 
-			savebut.Location = new Point(465, 228);
+			savebut.Location = new Point(640, 244);
 			savebut.Name = "savebut";
 			savebut.Size = new Size(75, 23);
 			savebut.TabIndex = 0;
 			savebut.Text = "Save";
 			savebut.UseVisualStyleBackColor = true;
+			savebut.Click += savebut_Click;
 			// 
 			// comboBox1
 			// 
@@ -88,24 +90,24 @@
 			// svrstatus
 			// 
 			svrstatus.BackColor = Color.Red;
-			svrstatus.Location = new Point(261, 228);
+			svrstatus.Location = new Point(292, 1);
 			svrstatus.Name = "svrstatus";
-			svrstatus.Size = new Size(99, 23);
+			svrstatus.Size = new Size(216, 23);
 			svrstatus.TabIndex = 5;
 			svrstatus.Text = "Server Status";
 			svrstatus.UseVisualStyleBackColor = false;
 			// 
-			// textBox2
+			// svraddrtxt
 			// 
-			textBox2.Location = new Point(326, 343);
-			textBox2.Name = "textBox2";
-			textBox2.Size = new Size(160, 23);
-			textBox2.TabIndex = 6;
+			svraddrtxt.Location = new Point(606, 199);
+			svraddrtxt.Name = "svraddrtxt";
+			svraddrtxt.Size = new Size(160, 23);
+			svraddrtxt.TabIndex = 6;
 			// 
 			// serveraddrlab
 			// 
 			serveraddrlab.AutoSize = true;
-			serveraddrlab.Location = new Point(358, 325);
+			serveraddrlab.Location = new Point(638, 181);
 			serveraddrlab.Name = "serveraddrlab";
 			serveraddrlab.Size = new Size(84, 15);
 			serveraddrlab.TabIndex = 7;
@@ -113,9 +115,9 @@
 			// 
 			// tstpagebut
 			// 
-			tstpagebut.Location = new Point(372, 266);
+			tstpagebut.Location = new Point(12, 148);
 			tstpagebut.Name = "tstpagebut";
-			tstpagebut.Size = new Size(49, 39);
+			tstpagebut.Size = new Size(267, 23);
 			tstpagebut.TabIndex = 8;
 			tstpagebut.Text = "Test Page";
 			tstpagebut.UseVisualStyleBackColor = true;
@@ -159,8 +161,9 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			BackgroundImage = Properties.Resources.IMG_1451;
-			BackgroundImageLayout = ImageLayout.Stretch;
+			BackColor = SystemColors.ControlDark;
+			BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+			BackgroundImageLayout = ImageLayout.Zoom;
 			ClientSize = new Size(800, 450);
 			Controls.Add(aeskeytxt);
 			Controls.Add(textBox3);
@@ -168,13 +171,14 @@
 			Controls.Add(listBox1);
 			Controls.Add(tstpagebut);
 			Controls.Add(serveraddrlab);
-			Controls.Add(textBox2);
+			Controls.Add(svraddrtxt);
 			Controls.Add(svrstatus);
 			Controls.Add(textBox1);
 			Controls.Add(rs232pttcmd);
 			Controls.Add(AudioOutDropLab);
 			Controls.Add(comboBox1);
 			Controls.Add(savebut);
+			DoubleBuffered = true;
 			Name = "Initial";
 			Text = "Initial";
 			ResumeLayout(false);
@@ -189,7 +193,7 @@
 		private Label rs232pttcmd;
 		private TextBox textBox1;
 		private Button svrstatus;
-		private TextBox textBox2;
+		private TextBox svraddrtxt;
 		private Label serveraddrlab;
 		private Button tstpagebut;
 		private ListBox listBox1;
