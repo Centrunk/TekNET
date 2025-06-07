@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             TNSplashLBL = new Label();
             RelCTRSLBL = new Label();
+            LoadingBar = new ProgressBar();
+            TikTimer1 = new System.Windows.Forms.Timer(components);
             SuspendLayout();
             // 
             // TNSplashLBL
@@ -53,6 +56,18 @@
             RelCTRSLBL.Text = "A product of the Centeral Texas Trunked Radio System";
             RelCTRSLBL.Click += RelCTRSLBL_Click;
             // 
+            // LoadingBar
+            // 
+            LoadingBar.Location = new Point(164, 98);
+            LoadingBar.Name = "LoadingBar";
+            LoadingBar.Size = new Size(100, 23);
+            LoadingBar.TabIndex = 2;
+            // 
+            // TikTimer1
+            // 
+            TikTimer1.Enabled = true;
+            TikTimer1.Tick += TikTimer1_Tick;
+            // 
             // Splash
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -60,6 +75,7 @@
             BackgroundImage = Properties.Resources.Flags_vert;
             BackgroundImageLayout = ImageLayout.Zoom;
             ClientSize = new Size(428, 216);
+            Controls.Add(LoadingBar);
             Controls.Add(RelCTRSLBL);
             Controls.Add(TNSplashLBL);
             DoubleBuffered = true;
@@ -73,5 +89,7 @@
 
         private Label TNSplashLBL;
         private Label RelCTRSLBL;
+        private ProgressBar LoadingBar;
+        private System.Windows.Forms.Timer TikTimer1;
     }
 }
