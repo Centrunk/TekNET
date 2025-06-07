@@ -69,5 +69,15 @@ namespace TeknetIssue.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sherbet_Pride_with_bowl {
+            get {
+                object obj = ResourceManager.GetObject("Sherbet_Pride_with_bowl", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

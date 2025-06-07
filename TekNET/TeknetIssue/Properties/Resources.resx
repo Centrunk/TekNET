@@ -121,4 +121,7 @@
   <data name="Flags_vert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Flags_vert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Sherbet_Pride_with_bowl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Sherbet_Pride_with_bowl.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
