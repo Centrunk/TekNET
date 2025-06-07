@@ -38,7 +38,7 @@
             // UserNameLBL
             // 
             UserNameLBL.AutoSize = true;
-            UserNameLBL.Location = new Point(49, 9);
+            UserNameLBL.Location = new Point(68, 9);
             UserNameLBL.Name = "UserNameLBL";
             UserNameLBL.Size = new Size(65, 15);
             UserNameLBL.TabIndex = 0;
@@ -47,7 +47,7 @@
             // 
             // UserNameTXT
             // 
-            UserNameTXT.Location = new Point(31, 27);
+            UserNameTXT.Location = new Point(54, 27);
             UserNameTXT.Name = "UserNameTXT";
             UserNameTXT.Size = new Size(100, 23);
             UserNameTXT.TabIndex = 1;
@@ -55,7 +55,7 @@
             // 
             // OTPTXT
             // 
-            OTPTXT.Location = new Point(31, 71);
+            OTPTXT.Location = new Point(54, 71);
             OTPTXT.Name = "OTPTXT";
             OTPTXT.Size = new Size(100, 23);
             OTPTXT.TabIndex = 2;
@@ -63,7 +63,7 @@
             // OTPLBL
             // 
             OTPLBL.AutoSize = true;
-            OTPLBL.Location = new Point(68, 53);
+            OTPLBL.Location = new Point(83, 53);
             OTPLBL.Name = "OTPLBL";
             OTPLBL.Size = new Size(28, 15);
             OTPLBL.TabIndex = 3;
@@ -71,7 +71,7 @@
             // 
             // LoginBut
             // 
-            LoginBut.Location = new Point(44, 100);
+            LoginBut.Location = new Point(66, 100);
             LoginBut.Name = "LoginBut";
             LoginBut.Size = new Size(75, 23);
             LoginBut.TabIndex = 4;
@@ -82,7 +82,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(170, 167);
+            BackgroundImage = Properties.Resources.Sherbet_Pride_with_bowl;
+            BackgroundImageLayout = ImageLayout.Zoom;
+            ClientSize = new Size(196, 136);
             Controls.Add(LoginBut);
             Controls.Add(OTPLBL);
             Controls.Add(OTPTXT);

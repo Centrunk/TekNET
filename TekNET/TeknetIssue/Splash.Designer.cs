@@ -72,6 +72,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(255, 192, 255);
             BackgroundImage = Properties.Resources.Flags_vert;
             BackgroundImageLayout = ImageLayout.Zoom;
             ClientSize = new Size(428, 216);
