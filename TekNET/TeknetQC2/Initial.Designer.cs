@@ -42,11 +42,17 @@
 			label1 = new Label();
 			textBox3 = new TextBox();
 			aeskeytxt = new Label();
+			otplabel = new Label();
+			otpbox = new TextBox();
+			faclab = new Label();
+			FACbox = new TextBox();
+			portlab = new Label();
+			portTXT = new TextBox();
 			SuspendLayout();
 			// 
 			// savebut
 			// 
-			savebut.Location = new Point(640, 244);
+			savebut.Location = new Point(640, 327);
 			savebut.Name = "savebut";
 			savebut.Size = new Size(75, 23);
 			savebut.TabIndex = 0;
@@ -96,18 +102,19 @@
 			svrstatus.TabIndex = 5;
 			svrstatus.Text = "Server Status";
 			svrstatus.UseVisualStyleBackColor = false;
+			svrstatus.Click += svrstatus_Click;
 			// 
 			// svraddrtxt
 			// 
-			svraddrtxt.Location = new Point(606, 199);
+			svraddrtxt.Location = new Point(581, 199);
 			svraddrtxt.Name = "svraddrtxt";
-			svraddrtxt.Size = new Size(160, 23);
+			svraddrtxt.Size = new Size(111, 23);
 			svraddrtxt.TabIndex = 6;
 			// 
 			// serveraddrlab
 			// 
 			serveraddrlab.AutoSize = true;
-			serveraddrlab.Location = new Point(638, 181);
+			serveraddrlab.Location = new Point(595, 181);
 			serveraddrlab.Name = "serveraddrlab";
 			serveraddrlab.Size = new Size(84, 15);
 			serveraddrlab.TabIndex = 7;
@@ -157,6 +164,54 @@
 			aeskeytxt.TabIndex = 12;
 			aeskeytxt.Text = "Server AES Key";
 			// 
+			// otplabel
+			// 
+			otplabel.AutoSize = true;
+			otplabel.Location = new Point(664, 230);
+			otplabel.Name = "otplabel";
+			otplabel.Size = new Size(28, 15);
+			otplabel.TabIndex = 14;
+			otplabel.Text = "OTP";
+			// 
+			// otpbox
+			// 
+			otpbox.Location = new Point(606, 248);
+			otpbox.Name = "otpbox";
+			otpbox.Size = new Size(160, 23);
+			otpbox.TabIndex = 13;
+			// 
+			// faclab
+			// 
+			faclab.AutoSize = true;
+			faclab.Location = new Point(640, 280);
+			faclab.Name = "faclab";
+			faclab.Size = new Size(75, 15);
+			faclab.TabIndex = 16;
+			faclab.Text = "Facility Code";
+			// 
+			// FACbox
+			// 
+			FACbox.Location = new Point(606, 298);
+			FACbox.Name = "FACbox";
+			FACbox.Size = new Size(160, 23);
+			FACbox.TabIndex = 15;
+			// 
+			// portlab
+			// 
+			portlab.AutoSize = true;
+			portlab.Location = new Point(726, 181);
+			portlab.Name = "portlab";
+			portlab.Size = new Size(29, 15);
+			portlab.TabIndex = 18;
+			portlab.Text = "Port";
+			// 
+			// portTXT
+			// 
+			portTXT.Location = new Point(698, 199);
+			portTXT.Name = "portTXT";
+			portTXT.Size = new Size(93, 23);
+			portTXT.TabIndex = 17;
+			// 
 			// Initial
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -165,6 +220,12 @@
 			BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
 			BackgroundImageLayout = ImageLayout.Zoom;
 			ClientSize = new Size(800, 450);
+			Controls.Add(portlab);
+			Controls.Add(portTXT);
+			Controls.Add(faclab);
+			Controls.Add(FACbox);
+			Controls.Add(otplabel);
+			Controls.Add(otpbox);
 			Controls.Add(aeskeytxt);
 			Controls.Add(textBox3);
 			Controls.Add(label1);
@@ -181,6 +242,7 @@
 			DoubleBuffered = true;
 			Name = "Initial";
 			Text = "Initial";
+			Load += Initial_Load;
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -200,5 +262,11 @@
 		private Label label1;
 		private TextBox textBox3;
 		private Label aeskeytxt;
+		private Label otplabel;
+		private TextBox otpbox;
+		private Label faclab;
+		private TextBox FACbox;
+		private Label portlab;
+		private TextBox portTXT;
 	}
 }

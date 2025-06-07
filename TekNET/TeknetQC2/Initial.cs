@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TN_API;
 
 namespace TeknetQC2
 {
@@ -21,6 +22,22 @@ namespace TeknetQC2
 		internal byte[] IV = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		private static byte[] aeskey = Encoding.ASCII.GetBytes(@"");
 
+		internal SimpleTCP.SimpleTcpClient STPC = new SimpleTCP.SimpleTcpClient();
+		internal int svrport;
+		internal void Connect()
+		{
+			try {
+				STPC.Connect(svraddrtxt.Text, svrport);
+				string sendy = "0x01" + "0x00" + FACbox.Text + otpbox.Text;
+				STPC.WriteLineAndGetReply(sendy, TimeSpan.FromSeconds(3));
+			} 
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			
+		}
+		internal bool svrconstat;
 		private void tstpagebut_Click(object sender, EventArgs e)
 		{
 			string[] testt = { "tech" };
@@ -31,6 +48,28 @@ namespace TeknetQC2
 		{
 			aeskey = Encoding.ASCII.GetBytes(aeskeytxt.Text);
 			serveraddr = svraddrtxt.Text;
+			svrport = int.Parse(portTXT.Text);
+		}
+
+		private void Initial_Load(object sender, EventArgs e)
+		{
+			portTXT.Text = "8650";
+			STPC.StringEncoder = Encoding.ASCII;
+			STPC.DataReceived += STPC_DataReceived;
+		}
+
+		private void STPC_DataReceived(object? sender, SimpleTCP.Message e)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void svrstatus_Click(object sender, EventArgs e)
+		{
+			if (svrconstat == false) 
+			{
+				Connect();
+			}
+
 		}
 	}
 }

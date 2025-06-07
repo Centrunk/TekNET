@@ -5,7 +5,7 @@
 
 namespace TN_API
 {
-	public class Opcodes
+	public static class Opcodes
 	{
 		public static void ClientReq()
 		{
