@@ -19,7 +19,8 @@ namespace TeknetQC2
 
 		private void tstpagebut_Click(object sender, EventArgs e)
 		{
-			VoiceTone.TONEOUT();
+			string[] testt = { "tech" };
+			VoiceTone.TONEOUT("Text", testt, 1,"0");
 		}
 	}
 }
