@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace Teknet2025Core
 {
-	public partial class SvrHome : Form
-	{
-		public SvrHome()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class SvrHome : Form
+    {
+        public SvrHome()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SvrHome_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
