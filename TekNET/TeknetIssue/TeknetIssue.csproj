@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CircularProgressBar" Version="2.2.0" />
     <PackageReference Include="SimpleTCP" Version="1.0.24" />
   </ItemGroup>
 
