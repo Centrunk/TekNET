@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace TeknetIssue
 {
-	public partial class NewAlert : Form
-	{
-		public NewAlert()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class NewAlert : Form
+    {
+        public NewAlert()
+        {
+            InitializeComponent();
+        }
+
+        private void AlertDestLBL_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
