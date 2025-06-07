@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teknet2025Core", "Teknet202
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TN_API", "TN_API\TN_API.csproj", "{9B2FEDE6-9B88-4913-97CD-556E12B36DC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeknetIssue", "TeknetIssue\TeknetIssue.csproj", "{35D0CA9C-926C-4DE7-A1F8-B52C46E5AD8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeknetQC2", "TeknetQC2\TeknetQC2.csproj", "{A3F4C2E8-0EA6-4211-B400-125184C7737F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{9B2FEDE6-9B88-4913-97CD-556E12B36DC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B2FEDE6-9B88-4913-97CD-556E12B36DC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B2FEDE6-9B88-4913-97CD-556E12B36DC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35D0CA9C-926C-4DE7-A1F8-B52C46E5AD8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35D0CA9C-926C-4DE7-A1F8-B52C46E5AD8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35D0CA9C-926C-4DE7-A1F8-B52C46E5AD8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35D0CA9C-926C-4DE7-A1F8-B52C46E5AD8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3F4C2E8-0EA6-4211-B400-125184C7737F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3F4C2E8-0EA6-4211-B400-125184C7737F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3F4C2E8-0EA6-4211-B400-125184C7737F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3F4C2E8-0EA6-4211-B400-125184C7737F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
