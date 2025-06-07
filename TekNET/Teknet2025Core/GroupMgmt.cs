@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Teknet2025Core
 {
-	public partial class ClientMgmt : Form
-	{
-		public ClientMgmt()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class GroupMgmt : Form
+    {
+        public GroupMgmt()
+        {
+            InitializeComponent();
+        }
+
+        private void CloseGroup_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

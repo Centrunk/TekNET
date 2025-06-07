@@ -31,7 +31,7 @@
             UserList = new ListBox();
             AddUser = new Button();
             EditUser = new Button();
-            ManageUser = new Button();
+            DeleteUser = new Button();
             SaveUsers = new Button();
             Close = new Button();
             SuspendLayout();
@@ -64,14 +64,14 @@
             EditUser.Text = "Edit User";
             EditUser.UseVisualStyleBackColor = true;
             // 
-            // ManageUser
+            // DeleteUser
             // 
-            ManageUser.Location = new Point(574, 70);
-            ManageUser.Name = "ManageUser";
-            ManageUser.Size = new Size(95, 23);
-            ManageUser.TabIndex = 3;
-            ManageUser.Text = "Manage User";
-            ManageUser.UseVisualStyleBackColor = true;
+            DeleteUser.Location = new Point(574, 70);
+            DeleteUser.Name = "DeleteUser";
+            DeleteUser.Size = new Size(95, 23);
+            DeleteUser.TabIndex = 3;
+            DeleteUser.Text = "Delete User";
+            DeleteUser.UseVisualStyleBackColor = true;
             // 
             // SaveUsers
             // 
@@ -98,12 +98,13 @@
             ClientSize = new Size(884, 661);
             Controls.Add(Close);
             Controls.Add(SaveUsers);
-            Controls.Add(ManageUser);
+            Controls.Add(DeleteUser);
             Controls.Add(EditUser);
             Controls.Add(AddUser);
             Controls.Add(UserList);
             Name = "UserMgmt";
             Text = "UserMgmt";
+            Load += UserMgmt_Load;
             ResumeLayout(false);
         }
 
@@ -112,7 +113,7 @@
         private ListBox UserList;
         private Button AddUser;
         private Button EditUser;
-        private Button ManageUser;
+        private Button DeleteUser;
         private Button SaveUsers;
         private Button Close;
     }

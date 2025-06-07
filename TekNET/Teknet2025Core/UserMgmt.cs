@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Teknet2025Core
 {
-	public partial class UserMgmt : Form
-	{
-		public UserMgmt()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class UserMgmt : Form
+    {
+        public UserMgmt()
+        {
+            InitializeComponent();
+        }
+
+        private void UserMgmt_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

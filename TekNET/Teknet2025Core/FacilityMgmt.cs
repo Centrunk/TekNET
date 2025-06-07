@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Teknet2025Core
 {
-	public partial class FacilityMgmt : Form
-	{
-		public FacilityMgmt()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class FacilityMgmt : Form
+    {
+        public FacilityMgmt()
+        {
+            InitializeComponent();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
