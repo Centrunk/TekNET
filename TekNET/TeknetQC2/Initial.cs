@@ -12,12 +12,14 @@ namespace TeknetQC2
 {
 	public partial class Initial : Form
 	{
-		public string aeskey;
 		public string serveraddr;
 		public Initial()
 		{
 			InitializeComponent();
 		}
+
+		internal byte[] IV = new byte[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		private static byte[] aeskey = Encoding.ASCII.GetBytes(@"");
 
 		private void tstpagebut_Click(object sender, EventArgs e)
 		{
@@ -27,7 +29,7 @@ namespace TeknetQC2
 
 		private void savebut_Click(object sender, EventArgs e)
 		{
-			aeskey = aeskeytxt.Text;
+			aeskey = Encoding.ASCII.GetBytes(aeskeytxt.Text);
 			serveraddr = svraddrtxt.Text;
 		}
 	}

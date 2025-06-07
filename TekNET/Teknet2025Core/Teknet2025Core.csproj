@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SimpleTCP" Version="1.0.24" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TN_API\TN_API.csproj" />
   </ItemGroup>
 

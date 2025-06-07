@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="SimpleTCP" Version="1.0.24" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
