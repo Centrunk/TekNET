@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace TeknetIssue
 {
-	public partial class Splash : Form
-	{
-		public Splash()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class Splash : Form
+    {
+        public Splash()
+        {
+            InitializeComponent();
+        }
+
+        private void RelCTRSLBL_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
