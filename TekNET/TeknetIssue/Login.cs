@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace TeknetIssue
 {
-	public partial class Login : Form
-	{
-		public Login()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class Login : Form
+    {
+        public Login()
+        {
+            InitializeComponent();
+        }
+
+        private void UserNameLBL_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UserNameTXT_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
