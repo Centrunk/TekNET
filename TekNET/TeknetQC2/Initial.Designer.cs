@@ -119,6 +119,7 @@
 			tstpagebut.TabIndex = 8;
 			tstpagebut.Text = "Test Page";
 			tstpagebut.UseVisualStyleBackColor = true;
+			tstpagebut.Click += tstpagebut_Click;
 			// 
 			// listBox1
 			// 

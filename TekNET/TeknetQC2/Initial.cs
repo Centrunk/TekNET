@@ -16,5 +16,10 @@ namespace TeknetQC2
 		{
 			InitializeComponent();
 		}
+
+		private void tstpagebut_Click(object sender, EventArgs e)
+		{
+			VoiceTone.TONEOUT();
+		}
 	}
 }
