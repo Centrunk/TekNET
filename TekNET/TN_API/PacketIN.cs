@@ -1,4 +1,9 @@
-﻿namespace TN_API
+﻿/*
+*   Copyright (C) 2025 by N5UWU & N7MOW
+*   This program is distributed WITHOUT WARRANTY.
+*/
+
+namespace TN_API
 {
 	public class PacketIN
 	{
