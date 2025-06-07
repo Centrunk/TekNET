@@ -30,14 +30,17 @@
 		{
 			savebut = new Button();
 			comboBox1 = new ComboBox();
-			label1 = new Label();
-			label2 = new Label();
+			AudioOutDropLab = new Label();
+			rs232pttcmd = new Label();
 			textBox1 = new TextBox();
+			svrstatus = new Button();
+			textBox2 = new TextBox();
+			serveraddrlab = new Label();
 			SuspendLayout();
 			// 
 			// savebut
 			// 
-			savebut.Location = new Point(653, 146);
+			savebut.Location = new Point(465, 228);
 			savebut.Name = "savebut";
 			savebut.Size = new Size(75, 23);
 			savebut.TabIndex = 0;
@@ -52,23 +55,23 @@
 			comboBox1.Size = new Size(121, 23);
 			comboBox1.TabIndex = 1;
 			// 
-			// label1
+			// AudioOutDropLab
 			// 
-			label1.AutoSize = true;
-			label1.Location = new Point(669, 31);
-			label1.Name = "label1";
-			label1.Size = new Size(38, 15);
-			label1.TabIndex = 2;
-			label1.Text = "label1";
+			AudioOutDropLab.AutoSize = true;
+			AudioOutDropLab.Location = new Point(661, 30);
+			AudioOutDropLab.Name = "AudioOutDropLab";
+			AudioOutDropLab.Size = new Size(62, 15);
+			AudioOutDropLab.TabIndex = 2;
+			AudioOutDropLab.Text = "Audio Out";
 			// 
-			// label2
+			// rs232pttcmd
 			// 
-			label2.AutoSize = true;
-			label2.Location = new Point(673, 79);
-			label2.Name = "label2";
-			label2.Size = new Size(38, 15);
-			label2.TabIndex = 3;
-			label2.Text = "label2";
+			rs232pttcmd.AutoSize = true;
+			rs232pttcmd.Location = new Point(648, 79);
+			rs232pttcmd.Name = "rs232pttcmd";
+			rs232pttcmd.Size = new Size(87, 15);
+			rs232pttcmd.TabIndex = 3;
+			rs232pttcmd.Text = "Serial PTT CMD";
 			// 
 			// textBox1
 			// 
@@ -77,16 +80,45 @@
 			textBox1.Size = new Size(121, 23);
 			textBox1.TabIndex = 4;
 			// 
+			// svrstatus
+			// 
+			svrstatus.BackColor = Color.Red;
+			svrstatus.Location = new Point(261, 228);
+			svrstatus.Name = "svrstatus";
+			svrstatus.Size = new Size(99, 23);
+			svrstatus.TabIndex = 5;
+			svrstatus.Text = "Server Status";
+			svrstatus.UseVisualStyleBackColor = false;
+			// 
+			// textBox2
+			// 
+			textBox2.Location = new Point(326, 343);
+			textBox2.Name = "textBox2";
+			textBox2.Size = new Size(160, 23);
+			textBox2.TabIndex = 6;
+			// 
+			// serveraddrlab
+			// 
+			serveraddrlab.AutoSize = true;
+			serveraddrlab.Location = new Point(358, 325);
+			serveraddrlab.Name = "serveraddrlab";
+			serveraddrlab.Size = new Size(84, 15);
+			serveraddrlab.TabIndex = 7;
+			serveraddrlab.Text = "Server Address";
+			// 
 			// Initial
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			BackgroundImage = Properties.Resources.IMG_1451;
-			BackgroundImageLayout = ImageLayout.Center;
+			BackgroundImageLayout = ImageLayout.Stretch;
 			ClientSize = new Size(800, 450);
+			Controls.Add(serveraddrlab);
+			Controls.Add(textBox2);
+			Controls.Add(svrstatus);
 			Controls.Add(textBox1);
-			Controls.Add(label2);
-			Controls.Add(label1);
+			Controls.Add(rs232pttcmd);
+			Controls.Add(AudioOutDropLab);
 			Controls.Add(comboBox1);
 			Controls.Add(savebut);
 			Name = "Initial";
@@ -99,8 +131,11 @@
 
 		private Button savebut;
 		private ComboBox comboBox1;
-		private Label label1;
-		private Label label2;
+		private Label AudioOutDropLab;
+		private Label rs232pttcmd;
 		private TextBox textBox1;
+		private Button svrstatus;
+		private TextBox textBox2;
+		private Label serveraddrlab;
 	}
 }
