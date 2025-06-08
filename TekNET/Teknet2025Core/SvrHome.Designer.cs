@@ -38,6 +38,7 @@
             ManageFacility = new Button();
             ServerSettings = new Button();
             ManageGroup = new Button();
+            AboutBUT = new Button();
             SuspendLayout();
             // 
             // PeerList
@@ -130,11 +131,21 @@
             ManageGroup.Text = "Manage group";
             ManageGroup.UseVisualStyleBackColor = true;
             // 
+            // AboutBUT
+            // 
+            AboutBUT.Location = new Point(587, 415);
+            AboutBUT.Name = "AboutBUT";
+            AboutBUT.Size = new Size(75, 23);
+            AboutBUT.TabIndex = 10;
+            AboutBUT.Text = "About";
+            AboutBUT.UseVisualStyleBackColor = true;
+            // 
             // SvrHome
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(AboutBUT);
             Controls.Add(ManageGroup);
             Controls.Add(ServerSettings);
             Controls.Add(ManageFacility);
@@ -164,5 +175,6 @@
         private Button ManageFacility;
         private Button ServerSettings;
         private Button ManageGroup;
+        private Button AboutBUT;
     }
 }

@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace TeknetIssue
 {
-	public partial class Main : Form
-	{
-		public Main()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class Main : Form
+    {
+        public Main()
+        {
+            InitializeComponent();
+        }
+
+        private void ServerStatusList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
