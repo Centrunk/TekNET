@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             FacilityList = new ListBox();
-            AddFacility = new Button();
-            EditFacility = new Button();
-            DeleteFacility = new Button();
-            SaveFacility = new Button();
-            CloseFacility = new Button();
+            AddFacilityBUT = new Button();
+            EditFacilityBUT = new Button();
+            DeleteFacilityBUT = new Button();
+            SaveFacilityBUT = new Button();
+            CloseFacilityBUT = new Button();
             SuspendLayout();
             // 
             // FacilityList
@@ -46,62 +46,62 @@
             FacilityList.Size = new Size(480, 604);
             FacilityList.TabIndex = 0;
             // 
-            // AddFacility
+            // AddFacilityBUT
             // 
-            AddFacility.Location = new Point(550, 12);
-            AddFacility.Name = "AddFacility";
-            AddFacility.Size = new Size(94, 23);
-            AddFacility.TabIndex = 1;
-            AddFacility.Text = "Add Facility";
-            AddFacility.UseVisualStyleBackColor = true;
+            AddFacilityBUT.Location = new Point(550, 12);
+            AddFacilityBUT.Name = "AddFacilityBUT";
+            AddFacilityBUT.Size = new Size(94, 23);
+            AddFacilityBUT.TabIndex = 1;
+            AddFacilityBUT.Text = "Add Facility";
+            AddFacilityBUT.UseVisualStyleBackColor = true;
             // 
-            // EditFacility
+            // EditFacilityBUT
             // 
-            EditFacility.Location = new Point(550, 41);
-            EditFacility.Name = "EditFacility";
-            EditFacility.Size = new Size(94, 23);
-            EditFacility.TabIndex = 2;
-            EditFacility.Text = "Edit Facility";
-            EditFacility.UseVisualStyleBackColor = true;
-            EditFacility.Click += button2_Click;
+            EditFacilityBUT.Location = new Point(550, 41);
+            EditFacilityBUT.Name = "EditFacilityBUT";
+            EditFacilityBUT.Size = new Size(94, 23);
+            EditFacilityBUT.TabIndex = 2;
+            EditFacilityBUT.Text = "Edit Facility";
+            EditFacilityBUT.UseVisualStyleBackColor = true;
+            EditFacilityBUT.Click += button2_Click;
             // 
-            // DeleteFacility
+            // DeleteFacilityBUT
             // 
-            DeleteFacility.Location = new Point(550, 70);
-            DeleteFacility.Name = "DeleteFacility";
-            DeleteFacility.Size = new Size(94, 23);
-            DeleteFacility.TabIndex = 3;
-            DeleteFacility.Text = "Delete Facility";
-            DeleteFacility.UseVisualStyleBackColor = true;
+            DeleteFacilityBUT.Location = new Point(550, 70);
+            DeleteFacilityBUT.Name = "DeleteFacilityBUT";
+            DeleteFacilityBUT.Size = new Size(94, 23);
+            DeleteFacilityBUT.TabIndex = 3;
+            DeleteFacilityBUT.Text = "Delete Facility";
+            DeleteFacilityBUT.UseVisualStyleBackColor = true;
             // 
-            // SaveFacility
+            // SaveFacilityBUT
             // 
-            SaveFacility.Location = new Point(820, 564);
-            SaveFacility.Name = "SaveFacility";
-            SaveFacility.Size = new Size(75, 23);
-            SaveFacility.TabIndex = 4;
-            SaveFacility.Text = "Save";
-            SaveFacility.UseVisualStyleBackColor = true;
+            SaveFacilityBUT.Location = new Point(820, 564);
+            SaveFacilityBUT.Name = "SaveFacilityBUT";
+            SaveFacilityBUT.Size = new Size(75, 23);
+            SaveFacilityBUT.TabIndex = 4;
+            SaveFacilityBUT.Text = "Save";
+            SaveFacilityBUT.UseVisualStyleBackColor = true;
             // 
-            // CloseFacility
+            // CloseFacilityBUT
             // 
-            CloseFacility.Location = new Point(820, 593);
-            CloseFacility.Name = "CloseFacility";
-            CloseFacility.Size = new Size(75, 23);
-            CloseFacility.TabIndex = 5;
-            CloseFacility.Text = "Close";
-            CloseFacility.UseVisualStyleBackColor = true;
+            CloseFacilityBUT.Location = new Point(820, 593);
+            CloseFacilityBUT.Name = "CloseFacilityBUT";
+            CloseFacilityBUT.Size = new Size(75, 23);
+            CloseFacilityBUT.TabIndex = 5;
+            CloseFacilityBUT.Text = "Close";
+            CloseFacilityBUT.UseVisualStyleBackColor = true;
             // 
             // FacilityMgmt
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(907, 628);
-            Controls.Add(CloseFacility);
-            Controls.Add(SaveFacility);
-            Controls.Add(DeleteFacility);
-            Controls.Add(EditFacility);
-            Controls.Add(AddFacility);
+            Controls.Add(CloseFacilityBUT);
+            Controls.Add(SaveFacilityBUT);
+            Controls.Add(DeleteFacilityBUT);
+            Controls.Add(EditFacilityBUT);
+            Controls.Add(AddFacilityBUT);
             Controls.Add(FacilityList);
             Name = "FacilityMgmt";
             Text = "FacilityMgmt";
@@ -111,10 +111,10 @@
         #endregion
 
         private ListBox FacilityList;
-        private Button AddFacility;
-        private Button EditFacility;
-        private Button DeleteFacility;
-        private Button SaveFacility;
-        private Button CloseFacility;
+        private Button AddFacilityBUT;
+        private Button EditFacilityBUT;
+        private Button DeleteFacilityBUT;
+        private Button SaveFacilityBUT;
+        private Button CloseFacilityBUT;
     }
 }

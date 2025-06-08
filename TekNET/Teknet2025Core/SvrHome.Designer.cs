@@ -31,13 +31,13 @@
             PeerList = new ListBox();
             ManualPollBUT = new Button();
             PeerID = new TextBox();
-            ForceLogOff = new Button();
-            SiteInfo = new Button();
-            EditConfig = new Button();
-            ManageUser = new Button();
-            ManageFacility = new Button();
-            ServerSettings = new Button();
-            ManageGroup = new Button();
+            ForceLogOffBUT = new Button();
+            SiteInfoBUT = new Button();
+            EditConfigBUT = new Button();
+            ManageUserBUT = new Button();
+            ManageFacilityBUT = new Button();
+            ServerSettingsBUT = new Button();
+            ManageGroupBUT = new Button();
             AboutBUT = new Button();
             SuspendLayout();
             // 
@@ -68,68 +68,68 @@
             PeerID.Size = new Size(100, 23);
             PeerID.TabIndex = 2;
             // 
-            // ForceLogOff
+            // ForceLogOffBUT
             // 
-            ForceLogOff.Location = new Point(409, 70);
-            ForceLogOff.Name = "ForceLogOff";
-            ForceLogOff.Size = new Size(99, 23);
-            ForceLogOff.TabIndex = 3;
-            ForceLogOff.Text = "Force Log Off";
-            ForceLogOff.UseVisualStyleBackColor = true;
+            ForceLogOffBUT.Location = new Point(409, 70);
+            ForceLogOffBUT.Name = "ForceLogOffBUT";
+            ForceLogOffBUT.Size = new Size(99, 23);
+            ForceLogOffBUT.TabIndex = 3;
+            ForceLogOffBUT.Text = "Force Log Off";
+            ForceLogOffBUT.UseVisualStyleBackColor = true;
             // 
-            // SiteInfo
+            // SiteInfoBUT
             // 
-            SiteInfo.Location = new Point(409, 99);
-            SiteInfo.Name = "SiteInfo";
-            SiteInfo.Size = new Size(99, 23);
-            SiteInfo.TabIndex = 4;
-            SiteInfo.Text = "Site Info";
-            SiteInfo.UseVisualStyleBackColor = true;
+            SiteInfoBUT.Location = new Point(409, 99);
+            SiteInfoBUT.Name = "SiteInfoBUT";
+            SiteInfoBUT.Size = new Size(99, 23);
+            SiteInfoBUT.TabIndex = 4;
+            SiteInfoBUT.Text = "Site Info";
+            SiteInfoBUT.UseVisualStyleBackColor = true;
             // 
-            // EditConfig
+            // EditConfigBUT
             // 
-            EditConfig.Location = new Point(409, 128);
-            EditConfig.Name = "EditConfig";
-            EditConfig.Size = new Size(99, 23);
-            EditConfig.TabIndex = 5;
-            EditConfig.Text = "Edit Config";
-            EditConfig.UseVisualStyleBackColor = true;
+            EditConfigBUT.Location = new Point(409, 128);
+            EditConfigBUT.Name = "EditConfigBUT";
+            EditConfigBUT.Size = new Size(99, 23);
+            EditConfigBUT.TabIndex = 5;
+            EditConfigBUT.Text = "Edit Config";
+            EditConfigBUT.UseVisualStyleBackColor = true;
             // 
-            // ManageUser
+            // ManageUserBUT
             // 
-            ManageUser.Location = new Point(528, 12);
-            ManageUser.Name = "ManageUser";
-            ManageUser.Size = new Size(102, 23);
-            ManageUser.TabIndex = 6;
-            ManageUser.Text = "Manage User";
-            ManageUser.UseVisualStyleBackColor = true;
+            ManageUserBUT.Location = new Point(528, 12);
+            ManageUserBUT.Name = "ManageUserBUT";
+            ManageUserBUT.Size = new Size(102, 23);
+            ManageUserBUT.TabIndex = 6;
+            ManageUserBUT.Text = "Manage User";
+            ManageUserBUT.UseVisualStyleBackColor = true;
             // 
-            // ManageFacility
+            // ManageFacilityBUT
             // 
-            ManageFacility.Location = new Point(528, 41);
-            ManageFacility.Name = "ManageFacility";
-            ManageFacility.Size = new Size(102, 23);
-            ManageFacility.TabIndex = 7;
-            ManageFacility.Text = "Manage Facility";
-            ManageFacility.UseVisualStyleBackColor = true;
+            ManageFacilityBUT.Location = new Point(528, 41);
+            ManageFacilityBUT.Name = "ManageFacilityBUT";
+            ManageFacilityBUT.Size = new Size(102, 23);
+            ManageFacilityBUT.TabIndex = 7;
+            ManageFacilityBUT.Text = "Manage Facility";
+            ManageFacilityBUT.UseVisualStyleBackColor = true;
             // 
-            // ServerSettings
+            // ServerSettingsBUT
             // 
-            ServerSettings.Location = new Point(668, 415);
-            ServerSettings.Name = "ServerSettings";
-            ServerSettings.Size = new Size(120, 23);
-            ServerSettings.TabIndex = 8;
-            ServerSettings.Text = "Server Settings";
-            ServerSettings.UseVisualStyleBackColor = true;
+            ServerSettingsBUT.Location = new Point(668, 415);
+            ServerSettingsBUT.Name = "ServerSettingsBUT";
+            ServerSettingsBUT.Size = new Size(120, 23);
+            ServerSettingsBUT.TabIndex = 8;
+            ServerSettingsBUT.Text = "Server Settings";
+            ServerSettingsBUT.UseVisualStyleBackColor = true;
             // 
-            // ManageGroup
+            // ManageGroupBUT
             // 
-            ManageGroup.Location = new Point(528, 71);
-            ManageGroup.Name = "ManageGroup";
-            ManageGroup.Size = new Size(102, 23);
-            ManageGroup.TabIndex = 9;
-            ManageGroup.Text = "Manage group";
-            ManageGroup.UseVisualStyleBackColor = true;
+            ManageGroupBUT.Location = new Point(528, 71);
+            ManageGroupBUT.Name = "ManageGroupBUT";
+            ManageGroupBUT.Size = new Size(102, 23);
+            ManageGroupBUT.TabIndex = 9;
+            ManageGroupBUT.Text = "Manage group";
+            ManageGroupBUT.UseVisualStyleBackColor = true;
             // 
             // AboutBUT
             // 
@@ -146,13 +146,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(AboutBUT);
-            Controls.Add(ManageGroup);
-            Controls.Add(ServerSettings);
-            Controls.Add(ManageFacility);
-            Controls.Add(ManageUser);
-            Controls.Add(EditConfig);
-            Controls.Add(SiteInfo);
-            Controls.Add(ForceLogOff);
+            Controls.Add(ManageGroupBUT);
+            Controls.Add(ServerSettingsBUT);
+            Controls.Add(ManageFacilityBUT);
+            Controls.Add(ManageUserBUT);
+            Controls.Add(EditConfigBUT);
+            Controls.Add(SiteInfoBUT);
+            Controls.Add(ForceLogOffBUT);
             Controls.Add(PeerID);
             Controls.Add(ManualPollBUT);
             Controls.Add(PeerList);
@@ -168,13 +168,13 @@
         private ListBox PeerList;
         private Button ManualPollBUT;
         private TextBox PeerID;
-        private Button ForceLogOff;
-        private Button SiteInfo;
-        private Button EditConfig;
-        private Button ManageUser;
-        private Button ManageFacility;
-        private Button ServerSettings;
-        private Button ManageGroup;
+        private Button ForceLogOffBUT;
+        private Button SiteInfoBUT;
+        private Button EditConfigBUT;
+        private Button ManageUserBUT;
+        private Button ManageFacilityBUT;
+        private Button ServerSettingsBUT;
+        private Button ManageGroupBUT;
         private Button AboutBUT;
     }
 }

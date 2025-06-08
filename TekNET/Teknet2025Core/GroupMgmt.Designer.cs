@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             GroupList = new ListBox();
-            AddGroup = new Button();
-            EditGroup = new Button();
-            DeleteGroup = new Button();
-            SaveGroup = new Button();
-            CloseGroup = new Button();
+            AddGroupBUT = new Button();
+            EditGroupBUT = new Button();
+            DeleteGroupBUT = new Button();
+            SaveGroupBUT = new Button();
+            CloseGroupBUT = new Button();
             SuspendLayout();
             // 
             // GroupList
@@ -46,62 +46,62 @@
             GroupList.Size = new Size(403, 619);
             GroupList.TabIndex = 0;
             // 
-            // AddGroup
+            // AddGroupBUT
             // 
-            AddGroup.Location = new Point(510, 12);
-            AddGroup.Name = "AddGroup";
-            AddGroup.Size = new Size(87, 23);
-            AddGroup.TabIndex = 1;
-            AddGroup.Text = "Add Group";
-            AddGroup.UseVisualStyleBackColor = true;
+            AddGroupBUT.Location = new Point(510, 12);
+            AddGroupBUT.Name = "AddGroupBUT";
+            AddGroupBUT.Size = new Size(87, 23);
+            AddGroupBUT.TabIndex = 1;
+            AddGroupBUT.Text = "Add Group";
+            AddGroupBUT.UseVisualStyleBackColor = true;
             // 
-            // EditGroup
+            // EditGroupBUT
             // 
-            EditGroup.Location = new Point(510, 41);
-            EditGroup.Name = "EditGroup";
-            EditGroup.Size = new Size(87, 23);
-            EditGroup.TabIndex = 2;
-            EditGroup.Text = "EditGroup";
-            EditGroup.UseVisualStyleBackColor = true;
+            EditGroupBUT.Location = new Point(510, 41);
+            EditGroupBUT.Name = "EditGroupBUT";
+            EditGroupBUT.Size = new Size(87, 23);
+            EditGroupBUT.TabIndex = 2;
+            EditGroupBUT.Text = "EditGroup";
+            EditGroupBUT.UseVisualStyleBackColor = true;
             // 
-            // DeleteGroup
+            // DeleteGroupBUT
             // 
-            DeleteGroup.Location = new Point(510, 70);
-            DeleteGroup.Name = "DeleteGroup";
-            DeleteGroup.Size = new Size(87, 23);
-            DeleteGroup.TabIndex = 3;
-            DeleteGroup.Text = "DeleteGroup";
-            DeleteGroup.UseVisualStyleBackColor = true;
+            DeleteGroupBUT.Location = new Point(510, 70);
+            DeleteGroupBUT.Name = "DeleteGroupBUT";
+            DeleteGroupBUT.Size = new Size(87, 23);
+            DeleteGroupBUT.TabIndex = 3;
+            DeleteGroupBUT.Text = "DeleteGroup";
+            DeleteGroupBUT.UseVisualStyleBackColor = true;
             // 
-            // SaveGroup
+            // SaveGroupBUT
             // 
-            SaveGroup.Location = new Point(813, 589);
-            SaveGroup.Name = "SaveGroup";
-            SaveGroup.Size = new Size(75, 23);
-            SaveGroup.TabIndex = 4;
-            SaveGroup.Text = "Save";
-            SaveGroup.UseVisualStyleBackColor = true;
+            SaveGroupBUT.Location = new Point(813, 589);
+            SaveGroupBUT.Name = "SaveGroupBUT";
+            SaveGroupBUT.Size = new Size(75, 23);
+            SaveGroupBUT.TabIndex = 4;
+            SaveGroupBUT.Text = "Save";
+            SaveGroupBUT.UseVisualStyleBackColor = true;
             // 
-            // CloseGroup
+            // CloseGroupBUT
             // 
-            CloseGroup.Location = new Point(813, 618);
-            CloseGroup.Name = "CloseGroup";
-            CloseGroup.Size = new Size(75, 23);
-            CloseGroup.TabIndex = 5;
-            CloseGroup.Text = "Close";
-            CloseGroup.UseVisualStyleBackColor = true;
-            CloseGroup.Click += CloseGroup_Click;
+            CloseGroupBUT.Location = new Point(813, 618);
+            CloseGroupBUT.Name = "CloseGroupBUT";
+            CloseGroupBUT.Size = new Size(75, 23);
+            CloseGroupBUT.TabIndex = 5;
+            CloseGroupBUT.Text = "Close";
+            CloseGroupBUT.UseVisualStyleBackColor = true;
+            CloseGroupBUT.Click += CloseGroup_Click;
             // 
             // GroupMgmt
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(900, 653);
-            Controls.Add(CloseGroup);
-            Controls.Add(SaveGroup);
-            Controls.Add(DeleteGroup);
-            Controls.Add(EditGroup);
-            Controls.Add(AddGroup);
+            Controls.Add(CloseGroupBUT);
+            Controls.Add(SaveGroupBUT);
+            Controls.Add(DeleteGroupBUT);
+            Controls.Add(EditGroupBUT);
+            Controls.Add(AddGroupBUT);
             Controls.Add(GroupList);
             Name = "GroupMgmt";
             Text = "GroupMgmt";
@@ -111,10 +111,10 @@
         #endregion
 
         private ListBox GroupList;
-        private Button AddGroup;
-        private Button EditGroup;
-        private Button DeleteGroup;
-        private Button SaveGroup;
-        private Button CloseGroup;
+        private Button AddGroupBUT;
+        private Button EditGroupBUT;
+        private Button DeleteGroupBUT;
+        private Button SaveGroupBUT;
+        private Button CloseGroupBUT;
     }
 }

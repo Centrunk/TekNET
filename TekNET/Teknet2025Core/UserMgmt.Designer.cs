@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             UserList = new ListBox();
-            AddUser = new Button();
-            EditUser = new Button();
-            DeleteUser = new Button();
-            SaveUsers = new Button();
-            Close = new Button();
+            AddUserBUT = new Button();
+            EditUserBUT = new Button();
+            DeleteUserBUT = new Button();
+            SaveUserBUT = new Button();
+            CloseUserBUT = new Button();
             SuspendLayout();
             // 
             // UserList
@@ -46,61 +46,61 @@
             UserList.Size = new Size(474, 634);
             UserList.TabIndex = 0;
             // 
-            // AddUser
+            // AddUserBUT
             // 
-            AddUser.Location = new Point(574, 12);
-            AddUser.Name = "AddUser";
-            AddUser.Size = new Size(95, 23);
-            AddUser.TabIndex = 1;
-            AddUser.Text = "Add User";
-            AddUser.UseVisualStyleBackColor = true;
+            AddUserBUT.Location = new Point(574, 12);
+            AddUserBUT.Name = "AddUserBUT";
+            AddUserBUT.Size = new Size(95, 23);
+            AddUserBUT.TabIndex = 1;
+            AddUserBUT.Text = "Add User";
+            AddUserBUT.UseVisualStyleBackColor = true;
             // 
-            // EditUser
+            // EditUserBUT
             // 
-            EditUser.Location = new Point(574, 41);
-            EditUser.Name = "EditUser";
-            EditUser.Size = new Size(95, 23);
-            EditUser.TabIndex = 2;
-            EditUser.Text = "Edit User";
-            EditUser.UseVisualStyleBackColor = true;
+            EditUserBUT.Location = new Point(574, 41);
+            EditUserBUT.Name = "EditUserBUT";
+            EditUserBUT.Size = new Size(95, 23);
+            EditUserBUT.TabIndex = 2;
+            EditUserBUT.Text = "Edit User";
+            EditUserBUT.UseVisualStyleBackColor = true;
             // 
-            // DeleteUser
+            // DeleteUserBUT
             // 
-            DeleteUser.Location = new Point(574, 70);
-            DeleteUser.Name = "DeleteUser";
-            DeleteUser.Size = new Size(95, 23);
-            DeleteUser.TabIndex = 3;
-            DeleteUser.Text = "Delete User";
-            DeleteUser.UseVisualStyleBackColor = true;
+            DeleteUserBUT.Location = new Point(574, 70);
+            DeleteUserBUT.Name = "DeleteUserBUT";
+            DeleteUserBUT.Size = new Size(95, 23);
+            DeleteUserBUT.TabIndex = 3;
+            DeleteUserBUT.Text = "Delete User";
+            DeleteUserBUT.UseVisualStyleBackColor = true;
             // 
-            // SaveUsers
+            // SaveUserBUT
             // 
-            SaveUsers.Location = new Point(797, 597);
-            SaveUsers.Name = "SaveUsers";
-            SaveUsers.Size = new Size(75, 23);
-            SaveUsers.TabIndex = 4;
-            SaveUsers.Text = "Save";
-            SaveUsers.UseVisualStyleBackColor = true;
+            SaveUserBUT.Location = new Point(797, 597);
+            SaveUserBUT.Name = "SaveUserBUT";
+            SaveUserBUT.Size = new Size(75, 23);
+            SaveUserBUT.TabIndex = 4;
+            SaveUserBUT.Text = "Save";
+            SaveUserBUT.UseVisualStyleBackColor = true;
             // 
-            // Close
+            // CloseUserBUT
             // 
-            Close.Location = new Point(797, 626);
-            Close.Name = "Close";
-            Close.Size = new Size(75, 23);
-            Close.TabIndex = 5;
-            Close.Text = "Close";
-            Close.UseVisualStyleBackColor = true;
+            CloseUserBUT.Location = new Point(797, 626);
+            CloseUserBUT.Name = "CloseUserBUT";
+            CloseUserBUT.Size = new Size(75, 23);
+            CloseUserBUT.TabIndex = 5;
+            CloseUserBUT.Text = "Close";
+            CloseUserBUT.UseVisualStyleBackColor = true;
             // 
             // UserMgmt
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 661);
-            Controls.Add(Close);
-            Controls.Add(SaveUsers);
-            Controls.Add(DeleteUser);
-            Controls.Add(EditUser);
-            Controls.Add(AddUser);
+            Controls.Add(CloseUserBUT);
+            Controls.Add(SaveUserBUT);
+            Controls.Add(DeleteUserBUT);
+            Controls.Add(EditUserBUT);
+            Controls.Add(AddUserBUT);
             Controls.Add(UserList);
             Name = "UserMgmt";
             Text = "UserMgmt";
@@ -111,10 +111,10 @@
         #endregion
 
         private ListBox UserList;
-        private Button AddUser;
-        private Button EditUser;
-        private Button DeleteUser;
-        private Button SaveUsers;
-        private Button Close;
+        private Button AddUserBUT;
+        private Button EditUserBUT;
+        private Button DeleteUserBUT;
+        private Button SaveUserBUT;
+        private Button CloseUserBUT;
     }
 }
